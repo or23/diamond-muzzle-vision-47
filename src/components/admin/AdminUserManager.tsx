@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Settings } from 'lucide-react';
 import { useEnhancedAnalytics } from '@/hooks/useEnhancedAnalytics';
@@ -77,30 +76,13 @@ export function AdminUserManager({}: AdminUserManagerProps) {
       try {
         console.log('Deleting user:', user.telegram_id);
         
-        // Delete from user_analytics first (foreign key constraint)
-        const { error: analyticsError } = await supabase
-          .from('user_analytics')
-          .delete()
-          .eq('telegram_id', user.telegram_id);
-
-        if (analyticsError) {
-          console.warn('Error deleting analytics:', analyticsError);
-        }
-
-        // Delete from blocked_users if exists
-        const { error: blockedError } = await supabase
-          .from('blocked_users')
-          .delete()
-          .eq('telegram_id', user.telegram_id);
-
-        if (blockedError) {
-          console.warn('Error deleting blocked user:', blockedError);
-        }
-
-        // Delete from user_profiles
+        // Instead of deleting, mark the user as inactive
         const { error: profileError } = await supabase
           .from('user_profiles')
-          .delete()
+          .update({
+            status: 'inactive',
+            updated_at: new Date().toISOString()
+          })
           .eq('telegram_id', user.telegram_id);
 
         if (profileError) {
@@ -112,23 +94,23 @@ export function AdminUserManager({}: AdminUserManagerProps) {
           .from('user_management_log')
           .insert({
             admin_telegram_id: 2138564172,
-            action_type: 'deleted',
+            action_type: 'deactivated',
             target_telegram_id: user.telegram_id,
-            reason: 'User deleted via admin panel'
+            reason: 'User deactivated via admin panel'
           });
 
         toast({
-          title: "User Deleted",
-          description: `Successfully deleted ${displayName}`,
+          title: "User Deactivated",
+          description: `${displayName} has been deactivated but their data is preserved for testing.`,
         });
 
         // Refresh the data
         refetch();
       } catch (error: any) {
-        console.error('Error deleting user:', error);
+        console.error('Error deactivating user:', error);
         toast({
           title: "Error",
-          description: error.message || "Failed to delete user",
+          description: error.message || "Failed to deactivate user",
           variant: "destructive",
         });
       } finally {
