@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import { useTelegramAuth } from '@/context/TelegramAuthContext';
@@ -26,20 +25,20 @@ export function useInventoryCrud(onSuccess?: () => void) {
     }
   };
 
-  const updateDiamond = async (diamondId: string, data: DiamondFormData) => {
+  const updateDiamond = async (stockNumber: string, data: DiamondFormData) => {
     setIsLoading(true);
     try {
-      const result = await updateDiamondFn(diamondId, data);
+      const result = await updateDiamondFn(stockNumber, data);
       return result;
     } finally {
       setIsLoading(false);
     }
   };
 
-  const deleteDiamond = async (diamondId: string) => {
+  const deleteDiamond = async (stockNumber: string) => {
     setIsLoading(true);
     try {
-      const result = await deleteDiamondFn(diamondId);
+      const result = await deleteDiamondFn(stockNumber);
       return result;
     } finally {
       setIsLoading(false);

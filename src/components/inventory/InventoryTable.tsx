@@ -1,4 +1,3 @@
-
 import {
   Table,
   TableBody,
@@ -27,7 +26,7 @@ interface InventoryTableProps {
   data: Diamond[];
   loading?: boolean;
   onEdit?: (diamond: Diamond) => void;
-  onDelete?: (diamondId: string) => void;
+  onDelete?: (stockNumber: string) => void;
 }
 
 export function InventoryTable({ data, loading = false, onEdit, onDelete }: InventoryTableProps) {

@@ -1,15 +1,13 @@
-
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useTelegramAuth } from '@/context/TelegramAuthContext';
 import { DiamondFormData } from '@/components/inventory/form/types';
-import { isValidUUID } from '@/utils/diamondUtils';
 
 export function useUpdateDiamond(onSuccess?: () => void) {
   const { toast } = useToast();
   const { user } = useTelegramAuth();
 
-  const updateDiamond = async (diamondId: string, data: DiamondFormData) => {
+  const updateDiamond = async (stockNumber: string, data: DiamondFormData) => {
     if (!user?.id) {
       toast({
         variant: "destructive",
@@ -19,23 +17,23 @@ export function useUpdateDiamond(onSuccess?: () => void) {
       return false;
     }
 
-    // Validate diamond ID format
-    if (!diamondId || !isValidUUID(diamondId)) {
-      console.error('Invalid diamond ID format:', diamondId);
+    // Validate stock number format
+    if (!stockNumber || stockNumber.trim() === '') {
+      console.error('Invalid stock number format:', stockNumber);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Invalid diamond ID format. Please refresh and try again.",
+        description: "Invalid stock number format. Please refresh and try again.",
       });
       return false;
     }
 
     try {
-      console.log('Updating diamond ID:', diamondId, 'with data:', data);
+      console.log('Updating diamond with stock number:', stockNumber, 'with data:', data);
       
       // Prepare update data with proper validation and type conversion
       const updateData = {
-        stock_number: data.stockNumber?.toString() || '',
+        stock_number: data.stockNumber?.toString() || stockNumber,
         shape: data.shape || 'Round',
         weight: Number(data.carat) || 1,
         color: data.color || 'G',
@@ -52,23 +50,14 @@ export function useUpdateDiamond(onSuccess?: () => void) {
       const { data: updatedData, error } = await supabase
         .from('inventory')
         .update(updateData)
-        .eq('id', diamondId)
+        .eq('stock_number', stockNumber)
         .eq('user_id', user.id)
         .select()
         .single();
 
       if (error) {
         console.error('Supabase update error:', error);
-        
-        if (error.message.includes('invalid input syntax for type uuid')) {
-          throw new Error('Invalid diamond ID format. Please refresh the page and try again.');
-        } else if (error.message.includes('row-level security')) {
-          throw new Error('You do not have permission to update this diamond.');
-        } else if (error.message.includes('No rows found')) {
-          throw new Error('Diamond not found. It may have been deleted.');
-        } else {
-          throw new Error(`Update failed: ${error.message}`);
-        }
+        throw new Error(`Update failed: ${error.message}`);
       }
 
       if (!updatedData) {

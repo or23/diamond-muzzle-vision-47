@@ -1,15 +1,12 @@
-
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { api, apiEndpoints } from '@/lib/api';
 import { useTelegramAuth } from '@/context/TelegramAuthContext';
-import { isValidUUID } from '@/utils/diamondUtils';
 
 export function useDeleteDiamond(onSuccess?: () => void) {
   const { toast } = useToast();
   const { user } = useTelegramAuth();
 
-  const deleteDiamond = async (diamondId: string) => {
+  const deleteDiamond = async (stockNumber: string) => {
     if (!user?.id) {
       toast({
         variant: "destructive",
@@ -19,35 +16,30 @@ export function useDeleteDiamond(onSuccess?: () => void) {
       return false;
     }
 
-    // Validate diamond ID format
-    if (!diamondId || !isValidUUID(diamondId)) {
-      console.error('Invalid diamond ID for deletion:', diamondId);
+    // Validate stock number format
+    if (!stockNumber || stockNumber.trim() === '') {
+      console.error('Invalid stock number for deletion:', stockNumber);
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Invalid diamond ID format",
+        description: "Invalid stock number format",
       });
       return false;
     }
 
     try {
-      console.log('Deleting diamond ID:', diamondId, 'for user:', user.id);
+      console.log('Deleting diamond with stock number:', stockNumber, 'for user:', user.id);
       
-      // First try deleting directly from Supabase for immediate feedback
-      const { error: supabaseError } = await supabase
+      // Delete directly from Supabase
+      const { error } = await supabase
         .from('inventory')
         .delete()
-        .eq('id', diamondId)
+        .eq('stock_number', stockNumber)
         .eq('user_id', user.id);
 
-      if (supabaseError) {
-        console.error('Supabase delete error:', supabaseError);
-        // Fall back to API deletion
-        const response = await api.delete(apiEndpoints.deleteDiamond(diamondId, user.id));
-        
-        if (response.error) {
-          throw new Error(response.error);
-        }
+      if (error) {
+        console.error('Supabase delete error:', error);
+        throw new Error(error.message);
       }
       
       toast({

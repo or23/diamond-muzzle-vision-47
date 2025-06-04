@@ -81,8 +81,8 @@ export default function InventoryPage() {
     setIsFormOpen(true);
   };
 
-  const handleDeleteDiamond = (diamondId: string) => {
-    setDiamondToDelete(diamondId);
+  const handleDeleteDiamond = (stockNumber: string) => {
+    setDiamondToDelete(stockNumber);
     setDeleteDialogOpen(true);
   };
 
@@ -90,7 +90,7 @@ export default function InventoryPage() {
     let success = false;
     
     if (editingDiamond) {
-      success = await updateDiamond(editingDiamond.id, data);
+      success = await updateDiamond(editingDiamond.stockNumber, data);
     } else {
       success = await addDiamond(data);
     }

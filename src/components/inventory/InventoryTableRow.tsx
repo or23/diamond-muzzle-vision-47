@@ -1,4 +1,3 @@
-
 import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,29 +7,12 @@ import { Edit, Trash, ImageIcon } from "lucide-react";
 interface InventoryTableRowProps {
   diamond: Diamond;
   onEdit?: (diamond: Diamond) => void;
-  onDelete?: (diamondId: string) => void;
+  onDelete?: (stockNumber: string) => void;
 }
 
 export function InventoryTableRow({ diamond, onEdit, onDelete }: InventoryTableRowProps) {
   return (
     <TableRow className="hover:bg-slate-50 dark:hover:bg-slate-800">
-      <TableCell className="w-16">
-        {diamond.imageUrl ? (
-          <img 
-            src={diamond.imageUrl} 
-            alt={`Diamond ${diamond.stockNumber}`}
-            className="w-12 h-12 object-cover rounded border border-slate-200 dark:border-slate-600"
-            onError={(e) => {
-              e.currentTarget.style.display = 'none';
-              e.currentTarget.nextElementSibling?.classList.remove('hidden');
-            }}
-          />
-        ) : (
-          <div className="w-12 h-12 bg-slate-100 dark:bg-slate-700 rounded border border-slate-200 dark:border-slate-600 flex items-center justify-center">
-            <ImageIcon className="h-4 w-4 text-slate-400" />
-          </div>
-        )}
-      </TableCell>
       <TableCell className="font-mono text-xs font-medium text-slate-900 dark:text-slate-100">
         {diamond.stockNumber}
       </TableCell>
@@ -86,7 +68,7 @@ export function InventoryTableRow({ diamond, onEdit, onDelete }: InventoryTableR
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => onDelete(diamond.id)}
+              onClick={() => onDelete(diamond.stockNumber)}
               className="h-8 w-8 p-0 hover:bg-red-100 dark:hover:bg-red-900 text-red-600 dark:text-red-400"
             >
               <Trash className="h-4 w-4" />

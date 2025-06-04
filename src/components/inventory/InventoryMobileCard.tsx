@@ -1,4 +1,3 @@
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -8,7 +7,7 @@ import { Edit, Trash, ImageIcon } from "lucide-react";
 interface InventoryMobileCardProps {
   diamond: Diamond;
   onEdit?: (diamond: Diamond) => void;
-  onDelete?: (diamondId: string) => void;
+  onDelete?: (stockNumber: string) => void;
 }
 
 export function InventoryMobileCard({ diamond, onEdit, onDelete }: InventoryMobileCardProps) {
@@ -108,7 +107,7 @@ export function InventoryMobileCard({ diamond, onEdit, onDelete }: InventoryMobi
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => onDelete(diamond.id)}
+                onClick={() => onDelete(diamond.stockNumber)}
                 className="flex-1 h-9 text-red-600 border-red-200 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-950"
               >
                 <Trash className="h-4 w-4 mr-2" />
