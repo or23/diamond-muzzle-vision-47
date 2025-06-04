@@ -1,4 +1,3 @@
-
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 
 const corsHeaders = {
@@ -15,7 +14,6 @@ interface GIAData {
   cut: string;
   certificateNumber: string;
   lab: string;
-  price: number;
   status: string;
   imageUrl?: string;
 }
@@ -101,7 +99,6 @@ serve(async (req) => {
         cut: 'Excellent',
         certificateNumber: certificateNumber,
         lab: 'GIA',
-        price: Math.floor(5000 + Math.random() * 10000),
         status: 'Available',
         imageUrl: ''
       };
@@ -213,7 +210,6 @@ async function processWithOCR(imageData: string) {
         cut: parsedData.cut || 'Excellent',
         certificateNumber: parsedData.certificateNumber || '',
         lab: 'GIA',
-        price: Math.floor(5000 + Math.random() * 10000),
         status: 'Available',
         imageUrl: ''
       };
@@ -250,7 +246,6 @@ function createMockOCRResponse() {
     cut: 'Excellent',
     certificateNumber: `${Math.floor(1000000000 + Math.random() * 9000000000)}`,
     lab: 'GIA',
-    price: Math.floor(5000 + Math.random() * 10000),
     status: 'Available',
     imageUrl: ''
   };
@@ -284,7 +279,6 @@ function parseGIAHtml(html: string, certificateNumber: string): GIAData | null {
       cut: cutMatch ? cutMatch[1] : 'Excellent',
       certificateNumber: certificateNumber,
       lab: 'GIA',
-      price: Math.floor(5000 + Math.random() * 10000),
       status: 'Available',
       imageUrl: imageMatch ? imageMatch[1] : ''
     };
