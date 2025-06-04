@@ -127,5 +127,3 @@ export function AuthorizationGuard({ children }: AuthorizationGuardProps) {
   // User is authorized
   return <>{children}</>;
 }
-
-export { AuthorizationGuard }
