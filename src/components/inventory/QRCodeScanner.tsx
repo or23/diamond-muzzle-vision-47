@@ -1,4 +1,3 @@
-
 import React, { useRef, useEffect, useState } from 'react';
 import { BrowserMultiFormatReader } from '@zxing/library';
 import { Button } from '@/components/ui/button';
@@ -72,7 +71,13 @@ export function QRCodeScanner({ onScanSuccess, onClose, isOpen }: QRCodeScannerP
       }
 
       if (data) {
-        onScanSuccess(data);
+        // Important: Remove price from the data since GIA certificates don't have price
+        const giaData = {
+          ...data,
+          price: undefined // Remove price so user can set it
+        };
+        
+        onScanSuccess(giaData);
         stopScanning();
         toast({
           title: "Success",
@@ -196,7 +201,13 @@ export function QRCodeScanner({ onScanSuccess, onClose, isOpen }: QRCodeScannerP
       }
 
       if (data) {
-        onScanSuccess(data);
+        // Important: Remove price from the data since GIA certificates don't have price
+        const giaData = {
+          ...data,
+          price: undefined // Remove price so user can set it
+        };
+        
+        onScanSuccess(giaData);
         stopScanning();
         toast({
           title: "Success",
@@ -263,7 +274,7 @@ export function QRCodeScanner({ onScanSuccess, onClose, isOpen }: QRCodeScannerP
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+      <Card className="w-full max-w-md dark:bg-gray-800 dark:text-gray-100">
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
@@ -279,7 +290,7 @@ export function QRCodeScanner({ onScanSuccess, onClose, isOpen }: QRCodeScannerP
           <div className="relative">
             <video
               ref={videoRef}
-              className="w-full aspect-square rounded-lg bg-gray-100"
+              className="w-full aspect-square rounded-lg bg-gray-100 dark:bg-gray-700"
               autoPlay
               playsInline
               muted
@@ -299,7 +310,7 @@ export function QRCodeScanner({ onScanSuccess, onClose, isOpen }: QRCodeScannerP
           </div>
           
           {error && (
-            <div className="text-red-600 text-sm text-center">{error}</div>
+            <div className="text-red-600 dark:text-red-400 text-sm text-center">{error}</div>
           )}
           
           <div className="flex gap-2">
@@ -329,7 +340,7 @@ export function QRCodeScanner({ onScanSuccess, onClose, isOpen }: QRCodeScannerP
             className="hidden"
           />
           
-          <p className="text-sm text-gray-600 text-center">
+          <p className="text-sm text-gray-600 dark:text-gray-400 text-center">
             Scan a GIA QR code or upload an image of a GIA certificate. The system will automatically extract diamond data using OCR if needed.
           </p>
         </CardContent>
