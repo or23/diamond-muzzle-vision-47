@@ -52,14 +52,14 @@ export function AuthorizationGuard({ children }: AuthorizationGuardProps) {
   // Loading state
   if (authLoading || blockedLoading || settingsLoading || isAuthorized === null) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <div className="text-center p-8 bg-white rounded-xl shadow-lg max-w-md mx-4 border">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+        <div className="text-center p-8 bg-gray-800 rounded-xl shadow-lg max-w-md mx-4 border border-gray-700">
           <div className="relative">
             <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-200 border-t-blue-600 mx-auto mb-6"></div>
             <Shield className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-6 w-6 text-blue-600" />
           </div>
-          <h3 className="text-xl font-semibold text-gray-900 mb-2">Checking Authorization</h3>
-          <p className="text-gray-600 text-sm">Verifying your access permissions...</p>
+          <h3 className="text-xl font-semibold text-gray-100 mb-2">Checking Authorization</h3>
+          <p className="text-gray-400 text-sm">Verifying your access permissions...</p>
           {user && (
             <p className="text-xs text-gray-500 mt-2">User ID: {user.id}</p>
           )}
@@ -74,25 +74,25 @@ export function AuthorizationGuard({ children }: AuthorizationGuardProps) {
     const isAdminUser = user && user.id === ADMIN_TELEGRAM_ID;
     
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
-        <div className="text-center p-8 bg-white rounded-xl shadow-lg max-w-md mx-4 border">
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+        <div className="text-center p-8 bg-gray-800 rounded-xl shadow-lg max-w-md mx-4 border border-gray-700">
           <div className={`rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-6 ${
-            isAdminUser ? 'bg-yellow-50' : isBlocked ? 'bg-red-50' : 'bg-orange-50'
+            isAdminUser ? 'bg-yellow-900' : isBlocked ? 'bg-red-900' : 'bg-orange-900'
           }`}>
             {isAdminUser ? (
-              <Crown className="h-10 w-10 text-yellow-600" />
+              <Crown className="h-10 w-10 text-yellow-400" />
             ) : isBlocked ? (
-              <UserX className="h-10 w-10 text-red-600" />
+              <UserX className="h-10 w-10 text-red-400" />
             ) : (
-              <Clock className="h-10 w-10 text-orange-600" />
+              <Clock className="h-10 w-10 text-orange-400" />
             )}
           </div>
           
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">
+          <h2 className="text-2xl font-bold text-gray-100 mb-4">
             {isBlocked ? 'We\'ll be back soon!' : 'Coming Soon'}
           </h2>
           
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-400 mb-6">
             {isBlocked 
               ? 'We\'re currently making some improvements to enhance your experience. Please check back soon!'
               : 'We\'re putting the finishing touches on this feature. Please check back soon to see what we\'re building for you!'
@@ -115,7 +115,7 @@ export function AuthorizationGuard({ children }: AuthorizationGuardProps) {
             >
               Refresh & Retry
             </button>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-gray-400">
               If you believe this is an error, please contact the administrator.
             </p>
           </div>

@@ -28,7 +28,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
         return 'dark';
       }
     }
-    return 'light';
+    return 'dark'; // Default to dark mode
   });
 
   useEffect(() => {
@@ -36,6 +36,18 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     root.classList.remove('light', 'dark');
     root.classList.add(theme);
     localStorage.setItem('theme', theme);
+    
+    // Sync with Telegram if possible
+    if (window.Telegram?.WebApp) {
+      try {
+        // Set Telegram theme if it differs
+        if (window.Telegram.WebApp.colorScheme !== theme) {
+          console.log('Syncing theme with Telegram:', theme);
+        }
+      } catch (e) {
+        console.warn('Failed to sync theme with Telegram:', e);
+      }
+    }
   }, [theme]);
 
   const toggleTheme = () => {

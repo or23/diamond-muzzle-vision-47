@@ -281,7 +281,7 @@ export function QRCodeScanner({ onScanSuccess, onClose, isOpen }: QRCodeScannerP
               <Camera className="h-5 w-5" />
               Scan GIA Certificate
             </CardTitle>
-            <Button variant="ghost" size="sm" onClick={onClose}>
+            <Button variant="ghost" size="sm" onClick={onClose} className="text-gray-400 hover:text-gray-100">
               <X className="h-4 w-4" />
             </Button>
           </div>

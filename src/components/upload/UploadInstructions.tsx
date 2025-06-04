@@ -32,22 +32,22 @@ D1005,Cushion,1.75,H,SI2,Very Good,14000,Available`;
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-medium">Instructions</h3>
-      <div className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
+      <div className="space-y-2 text-sm text-gray-300">
         <p>Please ensure your CSV file follows the required format:</p>
-        <ul className="list-disc list-inside space-y-1 text-gray-600 dark:text-gray-400">
+        <ul className="list-disc list-inside space-y-1 text-gray-400">
           <li>One diamond per row</li>
           <li>Required columns: Stock #, Shape, Carat (or Weight), Color, Clarity, Price</li>
           <li>Optional columns: Cut, Certificate, Status</li>
           <li>First row should contain column headers</li>
         </ul>
-        <div className="mt-4 p-3 bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-800 rounded-lg">
-          <p className="text-sm text-green-800 dark:text-green-300">
+        <div className="mt-4 p-3 bg-green-900/30 border border-green-800 rounded-lg">
+          <p className="text-sm text-green-300">
             <strong>Ready:</strong> Your CSV data will be uploaded directly to your database 
             and filtered by your user ID ({userId}).
           </p>
         </div>
-        <p className="mt-4 text-gray-500 dark:text-gray-400 text-xs">
-          Need a template? <button onClick={handleDownloadTemplate} className="text-diamond-600 dark:text-diamond-400 hover:underline">Download sample CSV</button>
+        <p className="mt-4 text-gray-400 text-xs">
+          Need a template? <button onClick={handleDownloadTemplate} className="text-diamond-400 hover:underline">Download sample CSV</button>
         </p>
       </div>
     </div>

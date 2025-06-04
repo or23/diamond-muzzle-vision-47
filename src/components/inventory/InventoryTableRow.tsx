@@ -2,7 +2,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Diamond } from "./InventoryTable";
-import { Edit, Trash, ImageIcon } from "lucide-react";
+import { Edit, Trash } from "lucide-react";
 
 interface InventoryTableRowProps {
   diamond: Diamond;

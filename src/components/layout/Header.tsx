@@ -18,29 +18,34 @@ export function Header() {
   const displayName = user ? `${user.first_name}${user.last_name ? ` ${user.last_name}` : ''}` : 'Diamond Muzzle';
   const unreadNotifications = notifications.filter(n => !n.read).length;
   
+  // Check if we're in Telegram environment
+  const isTelegramEnv = typeof window !== 'undefined' && !!window.Telegram?.WebApp;
+  
   return (
-    <header className="h-16 border-b border-diamond-200 dark:border-gray-700 flex items-center justify-between px-4 bg-gradient-to-r from-white to-diamond-50 dark:from-gray-900 dark:to-gray-800 shadow-sm">
+    <header className="h-16 border-b border-diamond-200 dark:border-gray-700 flex items-center justify-between px-4 bg-gradient-to-r from-gray-900 to-gray-800 text-white shadow-sm">
       <div>
-        <h1 className="text-xl font-semibold bg-gradient-to-r from-diamond-600 to-diamond-700 bg-clip-text text-transparent px-[45px]">mazal-bot</h1>
+        <h1 className="text-xl font-semibold text-white">mazal-bot</h1>
       </div>
       
       <div className="flex items-center gap-2">
-        {/* Theme Toggle */}
-        <Button 
-          variant="ghost" 
-          size="icon" 
-          onClick={toggleTheme} 
-          className="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 transition-all duration-200 hover:scale-110"
-        >
-          {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
-        </Button>
+        {/* Only show theme toggle outside of Telegram */}
+        {!isTelegramEnv && (
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            onClick={toggleTheme} 
+            className="text-gray-300 hover:text-white dark:text-gray-300 dark:hover:text-white transition-all duration-200 hover:scale-110"
+          >
+            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+          </Button>
+        )}
 
         {/* Notifications */}
         <Button 
           variant="ghost" 
           size="icon" 
           onClick={() => navigate('/notifications')} 
-          className="relative text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 transition-all duration-200 hover:scale-110"
+          className="relative text-gray-300 hover:text-white dark:text-gray-300 dark:hover:text-white transition-all duration-200 hover:scale-110"
         >
           <Bell size={20} />
           {unreadNotifications > 0 && (
@@ -87,7 +92,14 @@ export function Header() {
               <span>Settings</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="cursor-pointer text-red-600 dark:text-red-400">
+            <DropdownMenuItem 
+              onClick={() => {
+                if (window.Telegram?.WebApp) {
+                  window.Telegram.WebApp.close();
+                }
+              }} 
+              className="cursor-pointer text-red-600 dark:text-red-400"
+            >
               Close App
             </DropdownMenuItem>
           </DropdownMenuContent>

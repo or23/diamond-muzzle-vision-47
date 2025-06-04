@@ -19,7 +19,7 @@ export function useAddDiamond(onSuccess?: () => void) {
     }
 
     try {
-      const stockNumber = generateDiamondId();
+      const stockNumber = data.stockNumber || `D${Date.now().toString().slice(-6)}`;
       
       const inventoryData = {
         user_id: user.id,
@@ -30,7 +30,8 @@ export function useAddDiamond(onSuccess?: () => void) {
         clarity: data.clarity,
         cut: data.cut,
         price_per_carat: data.price ? Math.round(data.price / data.carat) : null,
-        status: 'Available',
+        status: data.status || 'Available',
+        picture: data.imageUrl || null
       };
 
       console.log('Adding diamond with stock number:', stockNumber);

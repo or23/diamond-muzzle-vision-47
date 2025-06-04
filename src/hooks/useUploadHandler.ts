@@ -55,13 +55,13 @@ export const useUploadHandler = () => {
       // Transform data to match inventory table schema
       const inventoryData = mappedData.map(item => ({
         user_id: user.id,
-        stock_number: item.id,
+        stock_number: item.stock_number || `D${Date.now().toString().slice(-6)}`,
         shape: item.shape || 'round', // Default to round if not specified
-        weight: item.carat,
+        weight: item.weight,
         color: item.color,
         clarity: item.clarity,
         cut: item.cut,
-        price_per_carat: item.price ? Math.round(item.price / item.carat) : null,
+        price_per_carat: item.price ? Math.round(item.price / item.weight) : null,
         status: 'Available',
       }));
 
