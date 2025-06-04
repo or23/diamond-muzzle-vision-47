@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { RefreshCw, Plus, QrCode } from "lucide-react";
 
