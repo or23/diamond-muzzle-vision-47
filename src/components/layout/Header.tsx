@@ -22,7 +22,7 @@ export function Header() {
   const isTelegramEnv = typeof window !== 'undefined' && !!window.Telegram?.WebApp;
   
   return (
-    <header className="h-16 border-b border-diamond-200 dark:border-gray-700 flex items-center justify-between px-4 bg-gradient-to-r from-gray-900 to-gray-800 text-white shadow-sm">
+    <header className="h-16 border-b border-gray-800 flex items-center justify-between px-4 bg-gradient-to-r from-[#1A1A1A] to-[#212121] shadow-md">
       <div>
         <h1 className="text-xl font-semibold text-white">mazal-bot</h1>
       </div>
@@ -51,7 +51,7 @@ export function Header() {
           {unreadNotifications > 0 && (
             <Badge 
               variant="destructive" 
-              className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center text-xs p-0 animate-pulse"
+              className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center text-xs p-0 animate-pulse bg-[#7B2CBF]"
             >
               {unreadNotifications > 9 ? '9+' : unreadNotifications}
             </Badge>
@@ -64,41 +64,41 @@ export function Header() {
               variant="ghost" 
               className="relative h-8 w-8 rounded-full hover:scale-110 transition-all duration-200"
             >
-              <Avatar className="h-8 w-8 ring-2 ring-diamond-200 dark:ring-gray-600">
+              <Avatar className="h-8 w-8 ring-2 ring-[#7B2CBF]/50">
                 {user?.photo_url && <AvatarImage src={user.photo_url} alt={displayName} />}
-                <AvatarFallback className="bg-gradient-to-r from-diamond-500 to-diamond-600 text-white font-bold">
+                <AvatarFallback className="bg-gradient-to-r from-[#7B2CBF] to-[#9D4EDD] text-white font-bold">
                   {userInitials}
                 </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56">
+          <DropdownMenuContent align="end" className="w-56 bg-gray-800 border-gray-700 text-gray-200">
             <DropdownMenuLabel>
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">{displayName}</p>
+                <p className="text-sm font-medium leading-none text-gray-200">{displayName}</p>
                 {user?.username && (
-                  <p className="text-xs leading-none text-muted-foreground">
+                  <p className="text-xs leading-none text-gray-400">
                     @{user.username}
                   </p>
                 )}
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer">
-              <User className="mr-2 h-4 w-4" />
+            <DropdownMenuSeparator className="bg-gray-700" />
+            <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer hover:bg-gray-700">
+              <User className="mr-2 h-4 w-4 text-gray-400" />
               <span>Profile</span>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => navigate('/settings')} className="cursor-pointer">
+            <DropdownMenuItem onClick={() => navigate('/settings')} className="cursor-pointer hover:bg-gray-700">
               <span>Settings</span>
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator className="bg-gray-700" />
             <DropdownMenuItem 
               onClick={() => {
                 if (window.Telegram?.WebApp) {
                   window.Telegram.WebApp.close();
                 }
               }} 
-              className="cursor-pointer text-red-600 dark:text-red-400"
+              className="cursor-pointer text-red-400 hover:bg-red-900/30"
             >
               Close App
             </DropdownMenuItem>

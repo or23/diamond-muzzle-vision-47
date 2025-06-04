@@ -33,7 +33,7 @@ export function Layout({ children }: LayoutProps) {
   }, []);
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden flex bg-gray-900 text-gray-100">
+    <div className="min-h-screen w-full overflow-x-hidden flex bg-[#1A1A1A] text-gray-100">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div 
@@ -50,9 +50,9 @@ export function Layout({ children }: LayoutProps) {
         <Sidebar onClose={() => setSidebarOpen(false)} />
       </div>
       
-      <div className="flex-1 w-full min-w-0 flex flex-col bg-gray-900 lg:ml-0">
+      <div className="flex-1 w-full min-w-0 flex flex-col bg-[#1A1A1A] lg:ml-0">
         {/* Mobile header with menu button */}
-        <div className="lg:hidden flex items-center justify-between p-4 border-b border-gray-800 bg-gray-900">
+        <div className="lg:hidden flex items-center justify-between p-4 border-b border-gray-800 bg-[#1A1A1A]">
           <Button
             variant="ghost"
             size="sm"
@@ -70,7 +70,7 @@ export function Layout({ children }: LayoutProps) {
           <Header />
         </div>
         
-        <main className="flex-1 w-full min-w-0 p-2 sm:p-4 md:p-6 overflow-x-hidden bg-gray-900">
+        <main className="flex-1 w-full min-w-0 p-2 sm:p-4 md:p-6 overflow-x-hidden bg-[#1A1A1A]">
           <div className="w-full max-w-full overflow-x-hidden">
             {children}
           </div>

@@ -38,12 +38,11 @@ const Sidebar = ({ onClose }: SidebarProps) => {
   };
 
   return (
-    <aside className="w-64 bg-gray-900 border-r border-gray-800 flex flex-col h-full text-gray-300">
+    <aside className="w-64 bg-[#1A1A1A] border-r border-gray-800 flex flex-col h-full text-gray-300">
       {/* Header with close button for mobile */}
       <div className="p-4 border-b border-gray-800 flex items-center justify-between">
         <div>
           <h1 className="text-lg font-bold text-white">mazal-bot</h1>
-          {/* Admin indicator is removed */}
         </div>
         {onClose && (
           <Button variant="ghost" size="sm" onClick={onClose} className="lg:hidden p-1 text-gray-400 hover:text-white">
@@ -61,7 +60,7 @@ const Sidebar = ({ onClose }: SidebarProps) => {
             className={({ isActive }) => cn(
               'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors w-full',
               isActive 
-                ? 'bg-blue-900/50 text-blue-300' 
+                ? 'bg-[#7B2CBF]/30 text-[#9D4EDD] premium-shadow' 
                 : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200'
             )}
           >
@@ -83,8 +82,8 @@ const Sidebar = ({ onClose }: SidebarProps) => {
                 className={({ isActive }) => cn(
                   'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors w-full',
                   isActive 
-                    ? 'bg-gradient-to-r from-purple-900/50 to-cyan-900/50 text-purple-300 border border-purple-800' 
-                    : 'text-gray-400 hover:bg-gradient-to-r hover:from-purple-900/30 hover:to-cyan-900/30 hover:text-purple-300'
+                    ? 'bg-gradient-to-r from-[#7B2CBF]/30 to-[#9D4EDD]/30 text-[#9D4EDD] border border-[#7B2CBF]/50 premium-shadow' 
+                    : 'text-gray-400 hover:bg-gradient-to-r hover:from-[#7B2CBF]/20 hover:to-[#9D4EDD]/20 hover:text-[#9D4EDD]'
                 )}
               >
                 <item.icon className="h-4 w-4 flex-shrink-0" />

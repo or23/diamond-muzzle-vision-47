@@ -1,4 +1,3 @@
-
 import { StatCard } from "@/components/dashboard/StatCard";
 import { TrendingUp, Users, Crown, Bell, Diamond, DollarSign, BarChart3, Eye } from "lucide-react";
 
@@ -32,7 +31,7 @@ export function MetricsGrid({
           icon={Diamond} 
           trend={12} 
           trendLabel="this month" 
-          className="text-xs" 
+          className="text-xs premium-shadow" 
         />
         <StatCard 
           title="Portfolio Value" 
@@ -42,7 +41,7 @@ export function MetricsGrid({
           icon={DollarSign} 
           trend={8} 
           trendLabel="this week" 
-          className="text-xs" 
+          className="text-xs premium-shadow" 
         />
         <StatCard 
           title="Active Leads" 
@@ -51,7 +50,7 @@ export function MetricsGrid({
           icon={Users} 
           trend={15} 
           trendLabel="new today" 
-          className="text-xs" 
+          className="text-xs premium-shadow" 
         />
         <StatCard 
           title="Avg Price/Ct" 
@@ -61,7 +60,7 @@ export function MetricsGrid({
           icon={TrendingUp} 
           trend={5} 
           trendLabel="vs market" 
-          className="text-xs" 
+          className="text-xs premium-shadow" 
         />
       </div>
 
@@ -73,14 +72,14 @@ export function MetricsGrid({
           suffix="ct" 
           description="Weight" 
           icon={BarChart3} 
-          className="text-xs" 
+          className="text-xs premium-shadow" 
         />
         <StatCard 
           title="Premium Stones" 
           value={premiumDiamondsCount} 
           description=">2ct or >$10k" 
           icon={Crown} 
-          className="text-xs" 
+          className="text-xs premium-shadow" 
         />
         <StatCard 
           title="Notifications" 
@@ -89,7 +88,7 @@ export function MetricsGrid({
           icon={Bell} 
           trend={-3} 
           trendLabel="vs yesterday" 
-          className="text-xs" 
+          className="text-xs premium-shadow" 
         />
         <StatCard 
           title="Views Today" 
@@ -98,7 +97,7 @@ export function MetricsGrid({
           icon={Eye} 
           trend={23} 
           trendLabel="vs yesterday" 
-          className="text-xs" 
+          className="text-xs premium-shadow" 
         />
       </div>
     </>

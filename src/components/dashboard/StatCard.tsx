@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
@@ -56,8 +55,8 @@ export function StatCard({
   
   const trendClassName = trend 
     ? trend > 0 
-      ? "text-green-600" 
-      : "text-red-600" 
+      ? "text-green-400" 
+      : "text-red-400" 
     : "";
     
   const trendSign = trend 
@@ -67,14 +66,14 @@ export function StatCard({
     : "";
   
   return (
-    <Card className={cn("diamond-card", className)}>
+    <Card className={cn("premium-card", className)}>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium text-gray-500">{title}</CardTitle>
-        <Icon className="h-4 w-4 text-diamond-500" />
+        <CardTitle className="text-sm font-medium text-gray-400">{title}</CardTitle>
+        <Icon className="h-4 w-4 text-purple-400" />
       </CardHeader>
       <CardContent>
         {loading ? (
-          <div className="h-9 w-24 bg-gray-200 animate-pulse rounded" />
+          <div className="h-9 w-24 bg-gray-700 animate-pulse rounded" />
         ) : (
           <div className="stat-value animate-counter">
             {prefix}
@@ -84,7 +83,7 @@ export function StatCard({
         )}
         
         {(description || trend !== undefined) && (
-          <p className="text-xs text-muted-foreground mt-2">
+          <p className="text-xs text-gray-400 mt-2">
             {description}
             
             {trend !== undefined && (

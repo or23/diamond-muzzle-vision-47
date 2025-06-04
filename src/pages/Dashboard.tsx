@@ -1,4 +1,3 @@
-
 import { Layout } from "@/components/layout/Layout";
 import { InventoryChart } from "@/components/dashboard/InventoryChart";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -86,7 +85,7 @@ export default function Dashboard() {
   const chartData = Object.entries(shapeData).map(([name, value]) => ({
     name,
     value: Number(value), // Ensure value is a number
-    color: '#7a63f5'
+    color: '#9D4EDD'
   }));
 
   // Premium diamonds calculation
@@ -99,7 +98,7 @@ export default function Dashboard() {
 
   return (
     <Layout>
-      <div className="space-y-4 p-2 sm:p-4">
+      <div className="space-y-6 p-2 sm:p-4">
         <DashboardHeader emergencyMode={emergencyMode} />
 
         <MetricsGrid
@@ -114,10 +113,10 @@ export default function Dashboard() {
 
         {/* Charts and Detailed Info */}
         <div className="grid gap-4 lg:grid-cols-2">
-          <Card>
+          <Card className="premium-card premium-shadow-md">
             <CardHeader className="pb-2">
-              <CardTitle className="text-lg">Shape Distribution</CardTitle>
-              <CardDescription className="text-sm">
+              <CardTitle className="text-lg text-gray-200">Shape Distribution</CardTitle>
+              <CardDescription className="text-sm text-gray-400">
                 Your inventory breakdown
               </CardDescription>
             </CardHeader>
