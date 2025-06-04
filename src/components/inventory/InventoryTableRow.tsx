@@ -32,7 +32,7 @@ export function InventoryTableRow({ diamond, onEdit, onDelete }: InventoryTableR
       </TableCell>
       <TableCell>
         {diamond.shape === 'Round' ? (
-          <Badge variant="outline\" className="bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600">
+          <Badge variant="outline" className="bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600">
             {diamond.cut}
           </Badge>
         ) : (

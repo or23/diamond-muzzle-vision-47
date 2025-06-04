@@ -8,12 +8,12 @@ export function UploadInstructions({ userId }: UploadInstructionsProps) {
   // Function to handle CSV template download
   const handleDownloadTemplate = () => {
     // Create sample CSV data
-    const csvContent = `Stock #,Shape,Carat,Color,Clarity,Cut,Price,Status
-D1001,Round,1.01,D,VS1,Excellent,10000,Available
-D1002,Princess,1.52,E,VVS2,Very Good,15000,Available
-D1003,Emerald,2.03,F,SI1,Excellent,18500,Available
-D1004,Oval,1.25,G,VS2,Good,12500,Available
-D1005,Cushion,1.75,H,SI2,Very Good,14000,Available`;
+    const csvContent = `Stock #,Shape,Carat,Color,Clarity,Cut,Polish,Symmetry,Price,Status
+D1001,Round,1.01,D,VS1,Excellent,Excellent,Excellent,10000,Available
+D1002,Princess,1.52,E,VVS2,Very Good,Excellent,Very Good,15000,Available
+D1003,Emerald,2.03,F,SI1,Excellent,Very Good,Excellent,18500,Available
+D1004,Oval,1.25,G,VS2,Good,Good,Good,12500,Available
+D1005,Cushion,1.75,H,SI2,Very Good,Very Good,Very Good,14000,Available`;
 
     // Create a Blob with the CSV data
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -31,13 +31,13 @@ D1005,Cushion,1.75,H,SI2,Very Good,14000,Available`;
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-medium">Instructions</h3>
+      <h3 className="text-lg font-medium text-gray-200">Instructions</h3>
       <div className="space-y-2 text-sm text-gray-300">
         <p>Please ensure your CSV file follows the required format:</p>
         <ul className="list-disc list-inside space-y-1 text-gray-400">
           <li>One diamond per row</li>
           <li>Required columns: Stock #, Shape, Carat (or Weight), Color, Clarity, Price</li>
-          <li>Optional columns: Cut, Certificate, Status</li>
+          <li>Optional columns: Cut, Polish, Symmetry, Status</li>
           <li>First row should contain column headers</li>
         </ul>
         <div className="mt-4 p-3 bg-green-900/30 border border-green-800 rounded-lg">

@@ -64,11 +64,11 @@ export function CertificateUploadField({
     
     if (previewUrl === 'pdf' || previewUrl.endsWith('.pdf')) {
       return (
-        <div className="flex items-center justify-center p-4 bg-gray-100 rounded-md">
+        <div className="flex items-center justify-center p-4 bg-gray-100 dark:bg-gray-700 rounded-md">
           <FileText className="h-12 w-12 text-blue-500" />
           <div className="ml-3">
-            <p className="text-sm font-medium">Certificate PDF</p>
-            <p className="text-xs text-gray-500">
+            <p className="text-sm font-medium dark:text-gray-200">Certificate PDF</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
               {selectedFile?.name || 'Certificate document'}
             </p>
           </div>
@@ -77,7 +77,7 @@ export function CertificateUploadField({
     }
     
     return (
-      <div className="relative aspect-video w-full overflow-hidden rounded-md border bg-gray-100">
+      <div className="relative aspect-video w-full overflow-hidden rounded-md border bg-gray-100 dark:bg-gray-700 dark:border-gray-600">
         <img 
           src={previewUrl} 
           alt="Certificate Preview" 
@@ -95,7 +95,7 @@ export function CertificateUploadField({
     <div className="space-y-2">
       <Label htmlFor={id}>{label}</Label>
       
-      <div className="border rounded-md p-4 bg-gray-50">
+      <div className="border rounded-md p-4 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
         {previewUrl ? (
           <div className="space-y-3">
             {renderPreview()}
@@ -103,7 +103,7 @@ export function CertificateUploadField({
             {isUploading && (
               <div className="flex items-center justify-center p-2">
                 <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                <p className="text-sm text-gray-500">Uploading... {progress}%</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Uploading... {progress}%</p>
               </div>
             )}
             
@@ -114,6 +114,7 @@ export function CertificateUploadField({
                 size="sm" 
                 onClick={handleClear}
                 disabled={isUploading}
+                className="dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
               >
                 <X className="h-4 w-4 mr-2" />
                 Clear
@@ -122,19 +123,19 @@ export function CertificateUploadField({
           </div>
         ) : (
           <div 
-            className="flex flex-col items-center justify-center gap-2 py-8 cursor-pointer hover:bg-gray-100 rounded-md transition-colors"
+            className="flex flex-col items-center justify-center gap-2 py-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
             onClick={() => fileInputRef.current?.click()}
           >
             {isUploading ? (
               <>
                 <Loader2 className="h-10 w-10 text-gray-400 animate-spin" />
-                <p className="text-sm text-gray-500">Uploading... {progress}%</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Uploading... {progress}%</p>
               </>
             ) : (
               <>
                 <FileText className="h-10 w-10 text-gray-400" />
-                <p className="text-sm text-gray-500">Click to upload a certificate</p>
-                <p className="text-xs text-gray-400">PDF, PNG, JPG or GIF</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Click to upload a certificate</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500">PDF, PNG, JPG or GIF</p>
               </>
             )}
           </div>

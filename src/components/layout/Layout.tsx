@@ -1,7 +1,6 @@
-
 import Sidebar from "./Sidebar";
 import { Header } from "./Header";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -11,9 +10,30 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isTelegramEnv, setIsTelegramEnv] = useState(false);
+
+  useEffect(() => {
+    // Check if we're in Telegram environment
+    const isTelegram = typeof window !== 'undefined' && !!window.Telegram?.WebApp;
+    setIsTelegramEnv(isTelegram);
+    
+    // Set viewport height for mobile browsers
+    const setViewportHeight = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty('--tg-viewport-height', `${window.innerHeight}px`);
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+    };
+    
+    setViewportHeight();
+    window.addEventListener('resize', setViewportHeight);
+    
+    return () => {
+      window.removeEventListener('resize', setViewportHeight);
+    };
+  }, []);
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden flex bg-background">
+    <div className="min-h-screen w-full overflow-x-hidden flex bg-gray-900 text-gray-100">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div 
@@ -30,18 +50,18 @@ export function Layout({ children }: LayoutProps) {
         <Sidebar onClose={() => setSidebarOpen(false)} />
       </div>
       
-      <div className="flex-1 w-full min-w-0 flex flex-col bg-background lg:ml-0">
+      <div className="flex-1 w-full min-w-0 flex flex-col bg-gray-900 lg:ml-0">
         {/* Mobile header with menu button */}
-        <div className="lg:hidden flex items-center justify-between p-4 border-b border-gray-200 bg-white">
+        <div className="lg:hidden flex items-center justify-between p-4 border-b border-gray-800 bg-gray-900">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setSidebarOpen(true)}
-            className="p-2"
+            className="p-2 text-gray-300 hover:text-white"
           >
             <Menu className="h-5 w-5" />
           </Button>
-          <h1 className="text-lg font-bold text-gray-900">Diamond Muzzle</h1>
+          <h1 className="text-lg font-bold text-gray-100">Diamond Muzzle</h1>
           <div className="w-9" /> {/* Spacer for center alignment */}
         </div>
         
@@ -50,7 +70,7 @@ export function Layout({ children }: LayoutProps) {
           <Header />
         </div>
         
-        <main className="flex-1 w-full min-w-0 p-2 sm:p-4 md:p-6 overflow-x-hidden bg-background">
+        <main className="flex-1 w-full min-w-0 p-2 sm:p-4 md:p-6 overflow-x-hidden bg-gray-900">
           <div className="w-full max-w-full overflow-x-hidden">
             {children}
           </div>

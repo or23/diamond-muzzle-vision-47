@@ -236,8 +236,8 @@ export function DiamondForm({ diamond, onSubmit, onCancel, isLoading = false }: 
       </div>
 
       {!isRoundShape && (
-        <Alert variant="default" className="bg-blue-50 text-blue-800 border-blue-200">
-          <AlertTriangle className="h-4 w-4 text-blue-600" />
+        <Alert variant="default" className="bg-blue-50 text-blue-800 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800">
+          <AlertTriangle className="h-4 w-4 text-blue-600 dark:text-blue-400" />
           <AlertDescription>
             Cut grade is only applicable for Round diamonds. For {currentShape} diamonds, please use Polish and Symmetry grades.
           </AlertDescription>

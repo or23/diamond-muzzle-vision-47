@@ -17,11 +17,11 @@ export type Diamond = {
   color: string;
   clarity: string;
   cut: string;
+  polish?: string;
+  symmetry?: string;
   price: number;
   status: string;
   imageUrl?: string;
-  polish?: string;
-  symmetry?: string;
   certificateUrl?: string;
 };
 

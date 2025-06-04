@@ -1,7 +1,6 @@
 import { useToast } from '@/components/ui/use-toast';
 import { useTelegramAuth } from '@/context/TelegramAuthContext';
 import { DiamondFormData } from '@/components/inventory/form/types';
-import { generateDiamondId } from '@/utils/diamondUtils';
 import { supabase } from '@/integrations/supabase/client';
 
 export function useAddDiamond(onSuccess?: () => void) {

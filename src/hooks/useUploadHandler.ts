@@ -60,9 +60,11 @@ export const useUploadHandler = () => {
         weight: item.weight,
         color: item.color,
         clarity: item.clarity,
-        cut: item.cut,
+        cut: item.shape?.toLowerCase() === 'round' ? item.cut : null,
+        polish: item.polish || 'Excellent',
+        symmetry: item.symmetry || 'Excellent',
         price_per_carat: item.price ? Math.round(item.price / item.weight) : null,
-        status: 'Available',
+        status: item.status || 'Available',
       }));
 
       const { error } = await supabase

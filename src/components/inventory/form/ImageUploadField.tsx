@@ -58,10 +58,10 @@ export function ImageUploadField({
     <div className="space-y-2">
       <Label htmlFor={id}>{label}</Label>
       
-      <div className="border rounded-md p-4 bg-gray-50">
+      <div className="border rounded-md p-4 bg-gray-50 dark:bg-gray-800 dark:border-gray-700">
         {previewUrl ? (
           <div className="space-y-3">
-            <div className="relative aspect-video w-full overflow-hidden rounded-md border bg-gray-100">
+            <div className="relative aspect-video w-full overflow-hidden rounded-md border bg-gray-100 dark:bg-gray-700 dark:border-gray-600">
               <img 
                 src={previewUrl} 
                 alt="Preview" 
@@ -88,6 +88,7 @@ export function ImageUploadField({
                 size="sm" 
                 onClick={handleClear}
                 disabled={isUploading}
+                className="dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700"
               >
                 <X className="h-4 w-4 mr-2" />
                 Clear
@@ -96,19 +97,19 @@ export function ImageUploadField({
           </div>
         ) : (
           <div 
-            className="flex flex-col items-center justify-center gap-2 py-8 cursor-pointer hover:bg-gray-100 rounded-md transition-colors"
+            className="flex flex-col items-center justify-center gap-2 py-8 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors"
             onClick={() => fileInputRef.current?.click()}
           >
             {isUploading ? (
               <>
                 <Loader2 className="h-10 w-10 text-gray-400 animate-spin" />
-                <p className="text-sm text-gray-500">Uploading... {progress}%</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Uploading... {progress}%</p>
               </>
             ) : (
               <>
                 <Image className="h-10 w-10 text-gray-400" />
-                <p className="text-sm text-gray-500">Click to upload an image</p>
-                <p className="text-xs text-gray-400">PNG, JPG or GIF</p>
+                <p className="text-sm text-gray-500 dark:text-gray-400">Click to upload an image</p>
+                <p className="text-xs text-gray-400 dark:text-gray-500">PNG, JPG or GIF</p>
               </>
             )}
           </div>

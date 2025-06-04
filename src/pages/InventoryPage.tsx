@@ -59,7 +59,12 @@ export default function InventoryPage() {
     handleSearch,
   } = useInventorySearch(allDiamonds, currentPage, filters);
 
-  const { addDiamond, updateDiamond, deleteDiamond, isLoading: crudLoading } = useInventoryCrud(handleRefresh);
+  const { addDiamond, updateDiamond, deleteDiamond, isLoading: crudLoading } = useInventoryCrud(() => {
+    // Success callback
+    setIsFormOpen(false);
+    setEditingDiamond(null);
+    handleRefresh();
+  });
 
   useEffect(() => {
     setDiamonds(filteredDiamonds);
@@ -107,6 +112,7 @@ export default function InventoryPage() {
       if (success) {
         setDeleteDialogOpen(false);
         setDiamondToDelete(null);
+        handleRefresh();
       }
     }
   };
@@ -121,7 +127,7 @@ export default function InventoryPage() {
     // Set the diamond data to be used in the form
     setEditingDiamond({
       id: '', // Will be generated when saving
-      stockNumber: giaData.stockNumber || `GIA-${Date.now()}`,
+      stockNumber: giaData.stockNumber || `GIA-${Date.now().toString().slice(-6)}`,
       shape: giaData.shape || 'Round',
       carat: giaData.carat || 1.0,
       color: giaData.color || 'G',
@@ -129,7 +135,7 @@ export default function InventoryPage() {
       cut: giaData.cut || 'Excellent',
       polish: giaData.polish || 'Excellent',
       symmetry: giaData.symmetry || 'Excellent',
-      price: giaData.price || 5000,
+      price: 0, // Price needs to be set by the user
       status: giaData.status || 'Available',
       imageUrl: giaData.imageUrl || '',
       certificateUrl: giaData.certificateUrl || '',
@@ -141,7 +147,7 @@ export default function InventoryPage() {
     
     toast({
       title: "GIA Data Loaded",
-      description: `Certificate ${giaData.certificateNumber} data has been loaded into the form`,
+      description: `Certificate ${giaData.certificateNumber} data has been loaded. Please set the price.`,
     });
   };
 
@@ -212,7 +218,7 @@ export default function InventoryPage() {
       </div>
 
       <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto dark:bg-gray-800 dark:text-gray-100">
           <DialogHeader>
             <DialogTitle>
               {editingDiamond ? 'Edit Diamond' : 'Add New Diamond'}
@@ -234,18 +240,18 @@ export default function InventoryPage() {
       />
 
       <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent>
+        <AlertDialogContent className="dark:bg-gray-800 dark:text-gray-100">
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
+            <AlertDialogDescription className="dark:text-gray-400">
               This action cannot be undone. This will permanently delete the diamond from your inventory.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel className="dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmDelete}
-              className="bg-red-600 hover:bg-red-700"
+              className="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800"
               disabled={crudLoading}
             >
               {crudLoading ? 'Deleting...' : 'Delete'}
