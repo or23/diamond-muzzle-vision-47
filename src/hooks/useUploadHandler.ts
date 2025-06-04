@@ -1,19 +1,13 @@
-
 import { useState } from "react";
-import { api, apiEndpoints } from "@/lib/api";
 import { toast } from "@/components/ui/use-toast";
 import { useTelegramAuth } from "@/context/TelegramAuthContext";
 import { useCsvProcessor } from "./useCsvProcessor";
+import { supabase } from "@/integrations/supabase/client";
 
 interface UploadResultData {
   totalItems: number;
   matchedPairs: number;
   errors: string[];
-}
-
-interface UploadResponse {
-  matched_pairs?: number;
-  errors?: string[];
 }
 
 export const useUploadHandler = () => {
@@ -58,22 +52,33 @@ export const useUploadHandler = () => {
       const csvData = await parseCSVFile(selectedFile);
       const mappedData = mapCsvData(csvData);
       
-      const response = await api.uploadCsv<UploadResponse>(
-        apiEndpoints.uploadInventory(),
-        mappedData,
-        user.id
-      );
-      
-      setProgress(100);
-      
-      if (response.error) {
-        throw new Error(response.error);
+      // Transform data to match inventory table schema
+      const inventoryData = mappedData.map(item => ({
+        user_id: user.id,
+        stock_number: item.id,
+        shape: item.shape || 'round', // Default to round if not specified
+        weight: item.carat,
+        color: item.color,
+        clarity: item.clarity,
+        cut: item.cut,
+        price_per_carat: item.price ? Math.round(item.price / item.carat) : null,
+        status: 'Available',
+      }));
+
+      const { error } = await supabase
+        .from('inventory')
+        .insert(inventoryData);
+
+      if (error) {
+        throw new Error(error.message);
       }
+
+      setProgress(100);
       
       const uploadResult: UploadResultData = {
         totalItems: mappedData.length,
-        matchedPairs: response.data?.matched_pairs || 0,
-        errors: response.data?.errors || [],
+        matchedPairs: mappedData.length,
+        errors: [],
       };
       
       setResult(uploadResult);

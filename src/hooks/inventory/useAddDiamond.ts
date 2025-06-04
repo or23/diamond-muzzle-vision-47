@@ -1,9 +1,8 @@
-
 import { useToast } from '@/components/ui/use-toast';
-import { api } from '@/lib/api';
 import { useTelegramAuth } from '@/context/TelegramAuthContext';
 import { DiamondFormData } from '@/components/inventory/form/types';
 import { generateDiamondId } from '@/utils/diamondUtils';
+import { supabase } from '@/integrations/supabase/client';
 
 export function useAddDiamond(onSuccess?: () => void) {
   const { toast } = useToast();
@@ -20,18 +19,28 @@ export function useAddDiamond(onSuccess?: () => void) {
     }
 
     try {
-      const diamondData = {
-        ...data,
+      const stockNumber = generateDiamondId();
+      
+      const inventoryData = {
         user_id: user.id,
-        id: generateDiamondId(),
+        stock_number: stockNumber,
+        shape: data.shape || 'round',
+        weight: data.carat,
+        color: data.color,
+        clarity: data.clarity,
+        cut: data.cut,
+        price_per_carat: data.price ? Math.round(data.price / data.carat) : null,
+        status: 'Available',
       };
 
-      console.log('Adding diamond with generated ID:', diamondData);
+      console.log('Adding diamond with stock number:', stockNumber);
       
-      const response = await api.uploadCsv('/upload-inventory', [diamondData], user.id);
-      
-      if (response.error) {
-        throw new Error(response.error);
+      const { error } = await supabase
+        .from('inventory')
+        .insert([inventoryData]);
+
+      if (error) {
+        throw new Error(error.message);
       }
 
       toast({
