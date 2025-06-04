@@ -38,10 +38,13 @@ export function useUpdateDiamond(onSuccess?: () => void) {
         weight: Number(data.carat) || 1,
         color: data.color || 'G',
         clarity: data.clarity || 'VS1',
-        cut: data.cut || 'Excellent',
+        cut: data.shape === 'Round' ? (data.cut || 'Excellent') : null,
+        polish: data.polish || 'Excellent',
+        symmetry: data.symmetry || 'Excellent',
         price_per_carat: data.carat > 0 ? Math.round(Number(data.price) / Number(data.carat)) : Math.round(Number(data.price)),
         status: data.status || 'Available',
         picture: data.imageUrl || null,
+        certificate_url: data.certificateUrl || null,
         updated_at: new Date().toISOString(),
       };
 
@@ -71,7 +74,12 @@ export function useUpdateDiamond(onSuccess?: () => void) {
         description: "Diamond updated successfully",
       });
       
-      if (onSuccess) onSuccess();
+      if (onSuccess) {
+        // Add a small delay to allow the user to see the success message
+        setTimeout(() => {
+          onSuccess();
+        }, 500);
+      }
       return true;
     } catch (error) {
       console.error('Failed to update diamond:', error);

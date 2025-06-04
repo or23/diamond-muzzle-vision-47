@@ -11,6 +11,11 @@ interface DiamondData {
   owners?: number[];
   owner_id?: number;
   status?: string;
+  cut?: string;
+  polish?: string;
+  symmetry?: string;
+  picture?: string;
+  certificate_url?: string;
 }
 
 interface DashboardStats {
@@ -128,9 +133,13 @@ export function convertDiamondsToInventoryFormat(diamonds: DiamondData[], curren
       carat: weight,
       color: diamond.color || 'Unknown',
       clarity: diamond.clarity || 'Unknown',
-      cut: 'Excellent', // Default since not in your data
+      cut: diamond.cut || 'Excellent',
+      polish: diamond.polish || 'Excellent',
+      symmetry: diamond.symmetry || 'Excellent',
       price: totalPrice,
       status: diamond.status || 'Available',
+      imageUrl: diamond.picture || '',
+      certificateUrl: diamond.certificate_url || '',
     };
   });
 }

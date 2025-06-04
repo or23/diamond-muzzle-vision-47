@@ -1,4 +1,3 @@
-
 export interface DiamondFormData {
   stockNumber: string;
   shape: string;
@@ -9,4 +8,7 @@ export interface DiamondFormData {
   price: number;
   status: string;
   imageUrl?: string;
+  polish?: string;
+  symmetry?: string;
+  certificateUrl?: string;
 }

@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Diamond } from "./InventoryTable";
-import { Edit, Trash, ImageIcon } from "lucide-react";
+import { Edit, Trash, ImageIcon, FileText } from "lucide-react";
 
 interface InventoryMobileCardProps {
   diamond: Diamond;
@@ -81,14 +81,45 @@ export function InventoryMobileCard({ diamond, onEdit, onDelete }: InventoryMobi
                 {diamond.color}
               </Badge>
             </div>
+            {diamond.shape === 'Round' && (
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">CUT</span>
+                <Badge variant="outline" className="bg-gray-700 text-gray-200 border-gray-600 text-xs">
+                  {diamond.cut}
+                </Badge>
+              </div>
+            )}
+          </div>
+
+          <div className="flex justify-between items-center">
             <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">CUT</span>
+              <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">POLISH</span>
               <Badge variant="outline" className="bg-gray-700 text-gray-200 border-gray-600 text-xs">
-                {diamond.cut}
+                {diamond.polish || 'N/A'}
+              </Badge>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-medium text-gray-400 uppercase tracking-wide">SYM</span>
+              <Badge variant="outline" className="bg-gray-700 text-gray-200 border-gray-600 text-xs">
+                {diamond.symmetry || 'N/A'}
               </Badge>
             </div>
           </div>
         </div>
+
+        {diamond.certificateUrl && (
+          <div className="mb-4 flex items-center gap-2 text-xs text-gray-400">
+            <FileText className="h-3 w-3" />
+            <a 
+              href={diamond.certificateUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-blue-400 hover:text-blue-300 truncate"
+            >
+              View Certificate
+            </a>
+          </div>
+        )}
 
         {(onEdit || onDelete) && (
           <div className="flex gap-2 pt-3 border-t border-gray-700 w-full">

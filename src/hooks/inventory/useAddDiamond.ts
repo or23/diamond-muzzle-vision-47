@@ -28,10 +28,13 @@ export function useAddDiamond(onSuccess?: () => void) {
         weight: data.carat,
         color: data.color,
         clarity: data.clarity,
-        cut: data.cut,
+        cut: data.shape === 'Round' ? data.cut : null,
+        polish: data.polish || 'Excellent',
+        symmetry: data.symmetry || 'Excellent',
         price_per_carat: data.price ? Math.round(data.price / data.carat) : null,
         status: data.status || 'Available',
-        picture: data.imageUrl || null
+        picture: data.imageUrl || null,
+        certificate_url: data.certificateUrl || null
       };
 
       console.log('Adding diamond with stock number:', stockNumber);
@@ -49,7 +52,12 @@ export function useAddDiamond(onSuccess?: () => void) {
         description: "Diamond added successfully",
       });
       
-      if (onSuccess) onSuccess();
+      if (onSuccess) {
+        // Add a small delay to allow the user to see the success message
+        setTimeout(() => {
+          onSuccess();
+        }, 500);
+      }
       return true;
     } catch (error) {
       console.error('Failed to add diamond:', error);

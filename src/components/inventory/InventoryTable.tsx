@@ -20,6 +20,9 @@ export type Diamond = {
   price: number;
   status: string;
   imageUrl?: string;
+  polish?: string;
+  symmetry?: string;
+  certificateUrl?: string;
 };
 
 interface InventoryTableProps {

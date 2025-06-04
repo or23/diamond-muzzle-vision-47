@@ -96,8 +96,8 @@ export default function InventoryPage() {
     }
 
     if (success) {
-      setIsFormOpen(false);
-      setEditingDiamond(null);
+      // Form will be closed by the onSuccess callback in useAddDiamond/useUpdateDiamond
+      // which includes a small delay to allow the user to see the success message
     }
   };
 
@@ -127,11 +127,12 @@ export default function InventoryPage() {
       color: giaData.color || 'G',
       clarity: giaData.clarity || 'VS1',
       cut: giaData.cut || 'Excellent',
+      polish: giaData.polish || 'Excellent',
+      symmetry: giaData.symmetry || 'Excellent',
       price: giaData.price || 5000,
       status: giaData.status || 'Available',
       imageUrl: giaData.imageUrl || '',
-      certificateNumber: giaData.certificateNumber || '',
-      lab: giaData.lab || 'GIA'
+      certificateUrl: giaData.certificateUrl || '',
     } as Diamond);
     
     // Close scanner and open form with populated data

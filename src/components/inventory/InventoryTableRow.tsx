@@ -2,7 +2,7 @@ import { TableCell, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Diamond } from "./InventoryTable";
-import { Edit, Trash } from "lucide-react";
+import { Edit, Trash, FileText } from "lucide-react";
 
 interface InventoryTableRowProps {
   diamond: Diamond;
@@ -31,9 +31,20 @@ export function InventoryTableRow({ diamond, onEdit, onDelete }: InventoryTableR
         </Badge>
       </TableCell>
       <TableCell>
-        <Badge variant="outline" className="bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600">
-          {diamond.cut}
-        </Badge>
+        {diamond.shape === 'Round' ? (
+          <Badge variant="outline" className="bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600">
+            {diamond.cut}
+          </Badge>
+        ) : (
+          <div className="flex gap-1">
+            <Badge variant="outline" className="bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600">
+              P: {diamond.polish || 'N/A'}
+            </Badge>
+            <Badge variant="outline" className="bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-700 dark:text-slate-200 dark:border-slate-600">
+              S: {diamond.symmetry || 'N/A'}
+            </Badge>
+          </div>
+        )}
       </TableCell>
       <TableCell className="text-right font-bold text-slate-900 dark:text-slate-100">
         ${diamond.price.toLocaleString()}
@@ -72,6 +83,16 @@ export function InventoryTableRow({ diamond, onEdit, onDelete }: InventoryTableR
               className="h-8 w-8 p-0 hover:bg-red-100 dark:hover:bg-red-900 text-red-600 dark:text-red-400"
             >
               <Trash className="h-4 w-4" />
+            </Button>
+          )}
+          {diamond.certificateUrl && (
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => window.open(diamond.certificateUrl, '_blank')}
+              className="h-8 w-8 p-0 hover:bg-blue-100 dark:hover:bg-blue-900 text-blue-600 dark:text-blue-400"
+            >
+              <FileText className="h-4 w-4" />
             </Button>
           )}
         </div>
