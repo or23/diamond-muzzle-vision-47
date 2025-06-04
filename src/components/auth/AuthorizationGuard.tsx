@@ -89,12 +89,12 @@ export function AuthorizationGuard({ children }: AuthorizationGuardProps) {
           </div>
           
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            {isBlocked ? 'Taking a Break' : 'Coming Soon'}
+            {isBlocked ? 'We\'ll be back soon!' : 'Coming Soon'}
           </h2>
           
           <p className="text-gray-600 mb-6">
             {isBlocked 
-              ? 'We\'re currently making some adjustments to your account. Please check back soon or contact support if you need immediate assistance.'
+              ? 'We\'re currently making some improvements to enhance your experience. Please check back soon!'
               : 'We\'re putting the finishing touches on this feature. Please check back soon to see what we\'re building for you!'
             }
           </p>
@@ -127,3 +127,5 @@ export function AuthorizationGuard({ children }: AuthorizationGuardProps) {
   // User is authorized
   return <>{children}</>;
 }
+
+export { AuthorizationGuard }
