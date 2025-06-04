@@ -1,5 +1,5 @@
 interface DiamondData {
-  id?: number;
+  id?: string;
   shape?: string;
   color?: string;
   clarity?: string;
@@ -122,7 +122,7 @@ export function convertDiamondsToInventoryFormat(diamonds: DiamondData[], curren
     const totalPrice = Math.round(pricePerCarat * weight);
     
     return {
-      id: diamond.id?.toString() || '',
+      id: diamond.id || '',
       stockNumber: diamond.stock || `D${diamond.id || Math.floor(Math.random() * 10000)}`,
       shape: diamond.shape || 'Unknown',
       carat: weight,
