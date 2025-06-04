@@ -1,4 +1,3 @@
-
 interface DiamondData {
   id?: number;
   shape?: string;

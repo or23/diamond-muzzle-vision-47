@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { api, apiEndpoints } from "@/lib/api";
@@ -40,6 +39,7 @@ export function useInventoryData() {
         console.log('Converted diamonds for display:', convertedDiamonds.length, 'diamonds for user', user.id);
         
         setAllDiamonds(convertedDiamonds);
+        setDiamonds(convertedDiamonds);
         
         // Show smaller, auto-dismissing toast
         if (convertedDiamonds.length > 0) {

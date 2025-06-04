@@ -1,4 +1,3 @@
-
 import { TelegramInitData } from '@/types/telegram';
 
 export function parseTelegramInitData(initData: string): TelegramInitData | null {

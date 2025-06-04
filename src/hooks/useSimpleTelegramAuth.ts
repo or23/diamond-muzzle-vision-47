@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { TelegramUser } from '@/types/telegram';
 import { parseTelegramInitData, isTelegramWebApp } from '@/utils/telegramValidation';
