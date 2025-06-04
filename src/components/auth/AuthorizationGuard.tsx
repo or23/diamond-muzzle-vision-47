@@ -89,19 +89,19 @@ export function AuthorizationGuard({ children }: AuthorizationGuardProps) {
           </div>
           
           <h2 className="text-2xl font-bold text-gray-900 mb-4">
-            {isBlocked ? 'Access Denied' : 'Authorization Required'}
+            {isBlocked ? 'Taking a Break' : 'Coming Soon'}
           </h2>
           
           <p className="text-gray-600 mb-6">
             {isBlocked 
-              ? 'Your access to this application has been restricted by the administrator.'
-              : 'This application now requires manual authorization. Please contact the administrator to request access.'
+              ? 'We\'re currently making some adjustments to your account. Please check back soon or contact support if you need immediate assistance.'
+              : 'We\'re putting the finishing touches on this feature. Please check back soon to see what we\'re building for you!'
             }
           </p>
           
           <div className="text-sm text-gray-500 mb-8 space-y-1">
             <p>User ID: {user?.id || 'Unknown'}</p>
-            <p>Status: {isBlocked ? 'Blocked' : 'Pending Authorization'}</p>
+            <p>Status: {isBlocked ? 'Maintenance Mode' : 'Coming Soon'}</p>
             {isAdminUser && <p className="text-yellow-600 font-medium">⚠️ Admin user detected but authorization failed</p>}
           </div>
           
