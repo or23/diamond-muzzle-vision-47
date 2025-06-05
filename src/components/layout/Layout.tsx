@@ -33,7 +33,7 @@ export function Layout({ children }: LayoutProps) {
   }, []);
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden flex bg-[#1A1A1A] text-gray-100">
+    <div className="min-h-screen w-full overflow-x-hidden flex bg-gray-50 text-gray-800">
       {/* Mobile overlay */}
       {sidebarOpen && (
         <div 
@@ -50,18 +50,18 @@ export function Layout({ children }: LayoutProps) {
         <Sidebar onClose={() => setSidebarOpen(false)} />
       </div>
       
-      <div className="flex-1 w-full min-w-0 flex flex-col bg-[#1A1A1A] lg:ml-0">
+      <div className="flex-1 w-full min-w-0 flex flex-col bg-gray-50 lg:ml-0">
         {/* Mobile header with menu button */}
-        <div className="lg:hidden flex items-center justify-between p-4 border-b border-gray-800 bg-[#1A1A1A]">
+        <div className="lg:hidden flex items-center justify-between p-4 border-b border-gray-200 bg-white">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => setSidebarOpen(true)}
-            className="p-2 text-gray-300 hover:text-white"
+            className="p-2 text-gray-600 hover:text-gray-800"
           >
             <Menu className="h-5 w-5" />
           </Button>
-          <h1 className="text-lg font-bold text-gray-100">Diamond Muzzle</h1>
+          <h1 className="text-lg font-bold text-gray-800">Diamond Muzzle</h1>
           <div className="w-9" /> {/* Spacer for center alignment */}
         </div>
         
@@ -70,7 +70,7 @@ export function Layout({ children }: LayoutProps) {
           <Header />
         </div>
         
-        <main className="flex-1 w-full min-w-0 p-2 sm:p-4 md:p-6 overflow-x-hidden bg-[#1A1A1A]">
+        <main className="flex-1 w-full min-w-0 p-2 sm:p-4 md:p-6 overflow-x-hidden bg-gray-50">
           <div className="w-full max-w-full overflow-x-hidden">
             {children}
           </div>

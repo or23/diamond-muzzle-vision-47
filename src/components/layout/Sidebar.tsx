@@ -38,14 +38,14 @@ const Sidebar = ({ onClose }: SidebarProps) => {
   };
 
   return (
-    <aside className="w-64 bg-[#1A1A1A] border-r border-gray-800 flex flex-col h-full text-gray-300">
+    <aside className="w-64 bg-white border-r border-gray-200 flex flex-col h-full text-gray-700">
       {/* Header with close button for mobile */}
-      <div className="p-4 border-b border-gray-800 flex items-center justify-between">
+      <div className="p-4 border-b border-gray-200 flex items-center justify-between">
         <div>
-          <h1 className="text-lg font-bold text-white">mazal-bot</h1>
+          <h1 className="text-lg font-bold text-gray-800">mazal-bot</h1>
         </div>
         {onClose && (
-          <Button variant="ghost" size="sm" onClick={onClose} className="lg:hidden p-1 text-gray-400 hover:text-white">
+          <Button variant="ghost" size="sm" onClick={onClose} className="lg:hidden p-1 text-gray-500 hover:text-gray-700">
             <X className="h-4 w-4" />
           </Button>
         )}
@@ -60,8 +60,8 @@ const Sidebar = ({ onClose }: SidebarProps) => {
             className={({ isActive }) => cn(
               'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors w-full',
               isActive 
-                ? 'bg-[#7B2CBF]/30 text-[#9D4EDD] premium-shadow' 
-                : 'text-gray-400 hover:bg-gray-800 hover:text-gray-200'
+                ? 'bg-blue-50 text-blue-600' 
+                : 'text-gray-600 hover:bg-gray-100 hover:text-gray-800'
             )}
           >
             <item.icon className="h-4 w-4 flex-shrink-0" />
@@ -70,7 +70,7 @@ const Sidebar = ({ onClose }: SidebarProps) => {
         ))}
         
         {isAdmin && (
-          <div className="pt-3 border-t border-gray-800 mt-3">
+          <div className="pt-3 border-t border-gray-200 mt-3">
             <div className="px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
               Admin Panel
             </div>
@@ -82,8 +82,8 @@ const Sidebar = ({ onClose }: SidebarProps) => {
                 className={({ isActive }) => cn(
                   'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors w-full',
                   isActive 
-                    ? 'bg-gradient-to-r from-[#7B2CBF]/30 to-[#9D4EDD]/30 text-[#9D4EDD] border border-[#7B2CBF]/50 premium-shadow' 
-                    : 'text-gray-400 hover:bg-gradient-to-r hover:from-[#7B2CBF]/20 hover:to-[#9D4EDD]/20 hover:text-[#9D4EDD]'
+                    ? 'bg-gradient-to-r from-blue-50 to-purple-50 text-blue-600 border border-blue-100' 
+                    : 'text-gray-600 hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-purple-50/50 hover:text-blue-600'
                 )}
               >
                 <item.icon className="h-4 w-4 flex-shrink-0" />
