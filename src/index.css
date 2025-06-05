@@ -34,6 +34,36 @@
     --sidebar-ring: 250 84% 65%;
   }
 
+  .dark {
+    --background: 0 0% 10%;
+    --foreground: 210 40% 98%;
+    --card: 0 0% 13%;
+    --card-foreground: 210 40% 98%;
+    --popover: 0 0% 13%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 272 59% 46%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 270 30% 20%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 270 30% 15%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --accent: 270 30% 20%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 270 30% 20%;
+    --input: 270 30% 20%;
+    --ring: 272 59% 46%;
+    --sidebar-background: 0 0% 10%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 272 59% 46%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 270 30% 20%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 270 30% 20%;
+    --sidebar-ring: 272 59% 46%;
+  }
+
   * {
     @apply border-border;
   }
@@ -78,12 +108,12 @@
 
 @layer components {
   .diamond-card {
-    @apply relative overflow-hidden bg-white rounded-xl border border-gray-200 shadow-md hover:shadow-lg transition-all duration-300;
+    @apply relative overflow-hidden bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl border border-gray-700 shadow-md hover:shadow-lg transition-all duration-300;
   }
   
   .diamond-card::before {
     content: '';
-    @apply absolute -top-8 -right-8 w-16 h-16 bg-blue-100 rounded-full opacity-50 blur-xl;
+    @apply absolute -top-8 -right-8 w-16 h-16 bg-purple-900/30 rounded-full opacity-50 blur-xl;
   }
   
   .data-grid {
@@ -91,19 +121,19 @@
   }
   
   .data-grid th {
-    @apply px-2 sm:px-4 py-2 sm:py-3 text-left font-medium text-gray-700 bg-gray-100 text-xs sm:text-sm;
+    @apply px-2 sm:px-4 py-2 sm:py-3 text-left font-medium text-gray-300 bg-gray-800 text-xs sm:text-sm;
   }
   
   .data-grid td {
-    @apply px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-200 text-xs sm:text-sm;
+    @apply px-2 sm:px-4 py-2 sm:py-3 border-t border-gray-700 text-xs sm:text-sm;
   }
   
   .data-grid tr:hover {
-    @apply bg-gray-50;
+    @apply bg-gray-700;
   }
   
   .stat-value {
-    @apply relative text-xl sm:text-4xl font-bold text-blue-600;
+    @apply relative text-xl sm:text-4xl font-bold text-purple-300;
   }
 
   /* Mobile-first responsive design */
@@ -139,5 +169,72 @@
     .btn-touch {
       @apply min-h-[44px] min-w-[44px];
     }
+  }
+
+  /* Premium Dark Theme Components */
+  .premium-card {
+    @apply bg-gray-800 border border-gray-700 rounded-lg shadow-lg;
+    box-shadow: 0 4px 6px rgba(123, 44, 191, 0.2);
+    transition: all 200ms ease-in-out;
+  }
+
+  .premium-card:hover {
+    box-shadow: 0 6px 12px rgba(123, 44, 191, 0.3);
+    transform: translateY(-2px);
+  }
+
+  .premium-button {
+    @apply bg-purple-700 text-white font-medium py-2 px-4 rounded-lg;
+    transition: all 200ms ease-in-out;
+    box-shadow: 0 2px 4px rgba(123, 44, 191, 0.2);
+  }
+
+  .premium-button:hover {
+    @apply bg-purple-600;
+    box-shadow: 0 4px 8px rgba(123, 44, 191, 0.3);
+  }
+
+  .premium-input {
+    @apply bg-gray-800 border border-gray-700 text-gray-100 rounded-lg;
+    transition: all 200ms ease-in-out;
+  }
+
+  .premium-input:focus {
+    @apply border-purple-500 ring-1 ring-purple-500;
+  }
+
+  .premium-badge {
+    @apply bg-purple-900 text-purple-200 px-2 py-1 rounded-md text-xs font-medium;
+  }
+
+  .premium-gradient {
+    background: linear-gradient(135deg, #1A1A1A 0%, #7B2CBF 100%);
+  }
+
+  .premium-text-gradient {
+    background: linear-gradient(135deg, #9D4EDD 0%, #C77DFF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .premium-shadow {
+    box-shadow: 0 4px 6px rgba(123, 44, 191, 0.2);
+  }
+
+  .premium-shadow-md {
+    box-shadow: 0 6px 12px rgba(123, 44, 191, 0.2);
+  }
+
+  .premium-shadow-lg {
+    box-shadow: 0 8px 16px rgba(123, 44, 191, 0.2);
+  }
+
+  .premium-glow {
+    box-shadow: 0 0 8px rgba(123, 44, 191, 0.4);
+  }
+
+  .premium-glow:hover {
+    box-shadow: 0 0 12px rgba(123, 44, 191, 0.6);
   }
 }
