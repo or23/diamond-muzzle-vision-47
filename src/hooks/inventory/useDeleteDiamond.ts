@@ -56,6 +56,28 @@ export function useDeleteDiamond(onSuccess?: () => void) {
         throw rpcError;
       }
       
+      // Also delete from FastAPI backend if available
+      try {
+        const apiUrl = `https://api.mazalbot.com/api/v1/delete_diamond?stock_number=${encodeURIComponent(stockNumber)}&user_id=${user.id}`;
+        const response = await fetch(apiUrl, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': 'Bearer ifj9ov1rh20fslfp',
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (!response.ok) {
+          console.warn('FastAPI delete warning:', response.status, response.statusText);
+          // Continue even if FastAPI fails - we've already deleted from Supabase
+        } else {
+          console.log('Successfully deleted from FastAPI backend');
+        }
+      } catch (apiError) {
+        console.warn('FastAPI delete error (non-critical):', apiError);
+        // Continue even if FastAPI fails - we've already deleted from Supabase
+      }
+      
       toast({
         title: "Success",
         description: "Diamond deleted successfully",
