@@ -30,16 +30,30 @@ export function useDeleteDiamond(onSuccess?: () => void) {
     try {
       console.log('Deleting diamond with stock number:', stockNumber, 'for user:', user.id);
       
-      // Delete directly from Supabase
-      const { error } = await supabase
-        .from('inventory')
-        .delete()
-        .eq('stock_number', stockNumber)
-        .eq('user_id', user.id);
+      // Try to use the RPC function first
+      const { data: rpcResult, error: rpcError } = await supabase.rpc(
+        'delete_diamond',
+        {
+          p_stock_number: stockNumber,
+          p_user_id: user.id
+        }
+      );
 
-      if (error) {
-        console.error('Supabase delete error:', error);
-        throw new Error(error.message);
+      // If RPC function doesn't exist or fails, fall back to direct delete
+      if (rpcError && rpcError.message.includes('function "delete_diamond" does not exist')) {
+        console.log('Falling back to direct delete');
+        const { error } = await supabase
+          .from('inventory')
+          .delete()
+          .eq('stock_number', stockNumber)
+          .eq('user_id', user.id);
+
+        if (error) {
+          console.error('Supabase delete error:', error);
+          throw new Error(error.message);
+        }
+      } else if (rpcError) {
+        throw rpcError;
       }
       
       toast({

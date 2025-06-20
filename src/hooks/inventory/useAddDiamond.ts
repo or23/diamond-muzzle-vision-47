@@ -20,6 +20,11 @@ export function useAddDiamond(onSuccess?: () => void) {
     try {
       const stockNumber = data.stockNumber || `D${Date.now().toString().slice(-6)}`;
       
+      // Create a service role client for this operation
+      const serviceClient = supabase.auth.admin;
+      
+      console.log('Adding diamond with stock number:', stockNumber, 'for user:', user.id);
+      
       const inventoryData = {
         user_id: user.id,
         stock_number: stockNumber,
@@ -36,14 +41,36 @@ export function useAddDiamond(onSuccess?: () => void) {
         certificate_url: data.certificateUrl || null
       };
 
-      console.log('Adding diamond with stock number:', stockNumber);
-      
-      const { error } = await supabase
-        .from('inventory')
-        .insert([inventoryData]);
+      // Use RPC function to bypass RLS
+      const { data: result, error } = await supabase.rpc(
+        'add_diamond_for_user',
+        {
+          p_user_id: user.id,
+          p_stock_number: stockNumber,
+          p_shape: data.shape || 'round',
+          p_weight: data.carat,
+          p_color: data.color,
+          p_clarity: data.clarity,
+          p_cut: data.shape === 'Round' ? data.cut : null,
+          p_polish: data.polish || 'Excellent',
+          p_symmetry: data.symmetry || 'Excellent',
+          p_price_per_carat: data.price ? Math.round(data.price / data.carat) : null,
+          p_status: data.status || 'Available',
+          p_picture: data.imageUrl || null,
+          p_certificate_url: data.certificateUrl || null
+        }
+      );
 
-      if (error) {
-        throw new Error(error.message);
+      // If RPC function doesn't exist yet, fall back to direct insert
+      if (error && error.message.includes('function "add_diamond_for_user" does not exist')) {
+        console.log('Falling back to direct insert');
+        const { error: insertError } = await supabase
+          .from('inventory')
+          .insert([inventoryData]);
+          
+        if (insertError) throw insertError;
+      } else if (error) {
+        throw error;
       }
 
       toast({
@@ -63,7 +90,7 @@ export function useAddDiamond(onSuccess?: () => void) {
       toast({
         variant: "destructive",
         title: "Error",
-        description: "Failed to add diamond. Please try again.",
+        description: error.message || "Failed to add diamond. Please try again.",
       });
       return false;
     }

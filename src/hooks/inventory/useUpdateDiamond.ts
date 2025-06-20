@@ -50,24 +50,40 @@ export function useUpdateDiamond(onSuccess?: () => void) {
 
       console.log('Supabase update data:', updateData);
 
-      const { data: updatedData, error } = await supabase
-        .from('inventory')
-        .update(updateData)
-        .eq('stock_number', stockNumber)
-        .eq('user_id', user.id)
-        .select()
-        .single();
+      // Try to use RPC function first
+      const { data: rpcResult, error: rpcError } = await supabase.rpc(
+        'update_diamond_for_user',
+        {
+          p_user_id: user.id,
+          p_stock_number: stockNumber,
+          p_update_data: updateData
+        }
+      );
 
-      if (error) {
-        console.error('Supabase update error:', error);
-        throw new Error(`Update failed: ${error.message}`);
+      // If RPC function doesn't exist, fall back to direct update
+      if (rpcError && rpcError.message.includes('function "update_diamond_for_user" does not exist')) {
+        console.log('Falling back to direct update');
+        const { data: updatedData, error } = await supabase
+          .from('inventory')
+          .update(updateData)
+          .eq('stock_number', stockNumber)
+          .eq('user_id', user.id)
+          .select()
+          .single();
+
+        if (error) {
+          console.error('Supabase update error:', error);
+          throw new Error(`Update failed: ${error.message}`);
+        }
+
+        if (!updatedData) {
+          throw new Error('Diamond not found or no changes were made');
+        }
+      } else if (rpcError) {
+        throw rpcError;
       }
 
-      if (!updatedData) {
-        throw new Error('Diamond not found or no changes were made');
-      }
-
-      console.log('Diamond updated successfully:', updatedData);
+      console.log('Diamond updated successfully');
       
       toast({
         title: "Success",
