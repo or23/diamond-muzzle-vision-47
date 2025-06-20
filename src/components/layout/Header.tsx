@@ -22,9 +22,9 @@ export function Header() {
   const isTelegramEnv = typeof window !== 'undefined' && !!window.Telegram?.WebApp;
   
   return (
-    <header className="h-16 border-b border-gray-800 flex items-center justify-between px-4 bg-gradient-to-r from-[#1A1A1A] to-[#212121] shadow-md">
+    <header className="h-16 border-b border-gray-200 flex items-center justify-between px-4 bg-white shadow-sm">
       <div>
-        <h1 className="text-xl font-semibold text-white">mazal-bot</h1>
+        <h1 className="text-xl font-semibold text-gray-900">mazal-bot</h1>
       </div>
       
       <div className="flex items-center gap-2">
@@ -34,7 +34,7 @@ export function Header() {
             variant="ghost" 
             size="icon" 
             onClick={toggleTheme} 
-            className="text-gray-300 hover:text-white dark:text-gray-300 dark:hover:text-white transition-all duration-200 hover:scale-110"
+            className="text-gray-600 hover:text-gray-900 transition-all duration-200 hover:scale-110"
           >
             {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
           </Button>
@@ -45,13 +45,13 @@ export function Header() {
           variant="ghost" 
           size="icon" 
           onClick={() => navigate('/notifications')} 
-          className="relative text-gray-300 hover:text-white dark:text-gray-300 dark:hover:text-white transition-all duration-200 hover:scale-110"
+          className="relative text-gray-600 hover:text-gray-900 transition-all duration-200 hover:scale-110"
         >
           <Bell size={20} />
           {unreadNotifications > 0 && (
             <Badge 
               variant="destructive" 
-              className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center text-xs p-0 animate-pulse bg-[#7B2CBF]"
+              className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center text-xs p-0 animate-pulse bg-purple-600"
             >
               {unreadNotifications > 9 ? '9+' : unreadNotifications}
             </Badge>
@@ -64,41 +64,41 @@ export function Header() {
               variant="ghost" 
               className="relative h-8 w-8 rounded-full hover:scale-110 transition-all duration-200"
             >
-              <Avatar className="h-8 w-8 ring-2 ring-[#7B2CBF]/50">
+              <Avatar className="h-8 w-8 ring-2 ring-purple-200">
                 {user?.photo_url && <AvatarImage src={user.photo_url} alt={displayName} />}
-                <AvatarFallback className="bg-gradient-to-r from-[#7B2CBF] to-[#9D4EDD] text-white font-bold">
+                <AvatarFallback className="bg-gradient-to-r from-purple-500 to-purple-600 text-white font-bold">
                   {userInitials}
                 </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56 bg-gray-800 border-gray-700 text-gray-200">
+          <DropdownMenuContent align="end" className="w-56 bg-white border-gray-200 text-gray-800">
             <DropdownMenuLabel>
               <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none text-gray-200">{displayName}</p>
+                <p className="text-sm font-medium leading-none text-gray-900">{displayName}</p>
                 {user?.username && (
-                  <p className="text-xs leading-none text-gray-400">
+                  <p className="text-xs leading-none text-gray-500">
                     @{user.username}
                   </p>
                 )}
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator className="bg-gray-700" />
-            <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer hover:bg-gray-700">
-              <User className="mr-2 h-4 w-4 text-gray-400" />
+            <DropdownMenuSeparator className="bg-gray-200" />
+            <DropdownMenuItem onClick={() => navigate('/profile')} className="cursor-pointer hover:bg-gray-100">
+              <User className="mr-2 h-4 w-4 text-gray-500" />
               <span>Profile</span>
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => navigate('/settings')} className="cursor-pointer hover:bg-gray-700">
+            <DropdownMenuItem onClick={() => navigate('/settings')} className="cursor-pointer hover:bg-gray-100">
               <span>Settings</span>
             </DropdownMenuItem>
-            <DropdownMenuSeparator className="bg-gray-700" />
+            <DropdownMenuSeparator className="bg-gray-200" />
             <DropdownMenuItem 
               onClick={() => {
                 if (window.Telegram?.WebApp) {
                   window.Telegram.WebApp.close();
                 }
               }} 
-              className="cursor-pointer text-red-400 hover:bg-red-900/30"
+              className="cursor-pointer text-red-600 hover:bg-red-50"
             >
               Close App
             </DropdownMenuItem>
