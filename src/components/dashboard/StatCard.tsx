@@ -1,6 +1,6 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { DivideIcon as LucideIcon } from "lucide-react";
+import { LucideIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 
 interface StatCardProps {
@@ -55,8 +55,8 @@ export function StatCard({
   
   const trendClassName = trend 
     ? trend > 0 
-      ? "text-green-400" 
-      : "text-red-400" 
+      ? "text-[#28A745]" 
+      : "text-[#DC3545]" 
     : "";
     
   const trendSign = trend 
@@ -66,33 +66,34 @@ export function StatCard({
     : "";
   
   return (
-    <Card className={cn("premium-card", className)}>
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium text-gray-400">{title}</CardTitle>
-        <Icon className="h-4 w-4 text-purple-400" />
-      </CardHeader>
-      <CardContent>
-        {loading ? (
-          <div className="h-9 w-24 bg-gray-700 animate-pulse rounded" />
-        ) : (
-          <div className="stat-value animate-counter">
-            {prefix}
-            {displayValue.toLocaleString()}
-            {suffix}
-          </div>
-        )}
-        
-        {(description || trend !== undefined) && (
-          <p className="text-xs text-gray-400 mt-2">
-            {description}
-            
-            {trend !== undefined && (
-              <span className={cn("ml-1", trendClassName)}>
-                {trendSign}{trend}% {trendLabel}
-              </span>
+    <Card className={cn("bg-white border border-[#E9ECEF] shadow-sm hover:shadow transition-shadow", className)}>
+      <CardContent className="p-6">
+        <div className="flex justify-between items-start">
+          <div>
+            <p className="text-[#6C757D] text-sm font-medium mb-1">{title}</p>
+            {loading ? (
+              <div className="h-9 w-24 bg-[#F1F3F5] animate-pulse rounded" />
+            ) : (
+              <h3 className="text-3xl font-bold text-[#2D3436]">
+                {prefix}{displayValue.toLocaleString()}{suffix}
+              </h3>
             )}
-          </p>
-        )}
+            
+            {(description || trend !== undefined) && (
+              <p className="text-[#6C757D] text-xs mt-1">
+                {trend !== undefined && (
+                  <span className={cn("font-medium", trendClassName)}>
+                    {trendSign}{trend}% 
+                  </span>
+                )}
+                {' '}{description || trendLabel}
+              </p>
+            )}
+          </div>
+          <div className="bg-[#E9F7FE] p-3 rounded-lg">
+            <Icon className="h-6 w-6 text-[#007BFF]" />
+          </div>
+        </div>
       </CardContent>
     </Card>
   );

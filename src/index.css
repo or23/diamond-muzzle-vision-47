@@ -10,19 +10,19 @@
     --card-foreground: 222.2 84% 4.9%;
     --popover: 0 0% 100%;
     --popover-foreground: 222.2 84% 4.9%;
-    --primary: 250 84% 65%;
+    --primary: 210 100% 50%;
     --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 250 95% 92%;
+    --accent: 210 100% 50%;
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
-    --ring: 250 84% 65%;
+    --ring: 210 100% 50%;
     --radius: 0.5rem;
     --sidebar-background: 250 45% 15%;
     --sidebar-foreground: 210 40% 98%;
@@ -236,5 +236,42 @@
 
   .premium-glow:hover {
     box-shadow: 0 0 12px rgba(123, 44, 191, 0.6);
+  }
+  
+  /* Light Theme Dashboard Components */
+  .dashboard-card {
+    @apply bg-white border border-[#E9ECEF] rounded-lg shadow-sm hover:shadow transition-shadow;
+  }
+  
+  .dashboard-stat {
+    @apply text-3xl font-bold text-[#2D3436];
+  }
+  
+  .dashboard-trend-up {
+    @apply text-[#28A745] font-medium;
+  }
+  
+  .dashboard-trend-down {
+    @apply text-[#DC3545] font-medium;
+  }
+  
+  .dashboard-icon-container {
+    @apply p-3 rounded-lg bg-[#E9F7FE];
+  }
+  
+  .dashboard-icon {
+    @apply h-6 w-6 text-[#007BFF];
+  }
+  
+  .dashboard-table th {
+    @apply text-left py-3 px-4 text-xs font-medium text-[#6C757D] border-b border-[#E9ECEF];
+  }
+  
+  .dashboard-table td {
+    @apply py-3 px-4 text-sm text-[#2D3436] border-b border-[#F1F3F5];
+  }
+  
+  .dashboard-table tr:hover {
+    @apply bg-[#F8F9FA];
   }
 }
