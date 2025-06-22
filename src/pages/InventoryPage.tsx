@@ -40,6 +40,7 @@ export default function InventoryPage() {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [diamondToDelete, setDiamondToDelete] = useState<string | null>(null);
   const [isQRScannerOpen, setIsQRScannerOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const { toast } = useToast();
 
   const {
@@ -108,11 +109,17 @@ export default function InventoryPage() {
 
   const confirmDelete = async () => {
     if (diamondToDelete) {
-      const success = await deleteDiamond(diamondToDelete);
-      if (success) {
-        setDeleteDialogOpen(false);
-        setDiamondToDelete(null);
-        handleRefresh();
+      setIsDeleting(true);
+      try {
+        const success = await deleteDiamond(diamondToDelete);
+        if (success) {
+          setDeleteDialogOpen(false);
+          setDiamondToDelete(null);
+          // Wait for backend confirmation before refreshing
+          await handleRefresh();
+        }
+      } finally {
+        setIsDeleting(false);
       }
     }
   };
@@ -252,9 +259,9 @@ export default function InventoryPage() {
             <AlertDialogAction
               onClick={confirmDelete}
               className="bg-red-600 hover:bg-red-700 dark:bg-red-700 dark:hover:bg-red-800"
-              disabled={crudLoading}
+              disabled={isDeleting}
             >
-              {crudLoading ? 'Deleting...' : 'Delete'}
+              {isDeleting ? 'Deleting...' : 'Delete'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

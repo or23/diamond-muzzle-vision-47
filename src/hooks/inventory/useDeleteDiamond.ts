@@ -1,6 +1,7 @@
 import { useToast } from '@/components/ui/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { useTelegramAuth } from '@/context/TelegramAuthContext';
+import { api, apiEndpoints } from '@/lib/api';
 
 export function useDeleteDiamond(onSuccess?: () => void) {
   const { toast } = useToast();
@@ -30,7 +31,41 @@ export function useDeleteDiamond(onSuccess?: () => void) {
     try {
       console.log('Deleting diamond with stock number:', stockNumber, 'for user:', user.id);
       
-      // Try to use the RPC function first
+      // Show deletion in progress toast
+      const pendingToast = toast({
+        title: "Deleting...",
+        description: `Removing diamond ${stockNumber} from inventory`,
+      });
+      
+      // First try to delete from FastAPI backend
+      let fastApiSuccess = false;
+      try {
+        const apiUrl = `${apiEndpoints.deleteDiamond(stockNumber, user.id)}`;
+        console.log('Calling FastAPI delete endpoint:', apiUrl);
+        
+        const response = await fetch(`https://api.mazalbot.com/api/v1/delete_stone/${stockNumber}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': 'Bearer ifj9ov1rh20fslfp',
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ user_id: user.id })
+        });
+        
+        if (response.ok) {
+          console.log('Successfully deleted from FastAPI backend');
+          fastApiSuccess = true;
+        } else {
+          const errorData = await response.json().catch(() => ({}));
+          console.warn('FastAPI delete warning:', response.status, response.statusText, errorData);
+          // Continue with Supabase delete even if FastAPI fails
+        }
+      } catch (apiError) {
+        console.warn('FastAPI delete error:', apiError);
+        // Continue with Supabase delete even if FastAPI fails
+      }
+      
+      // Then try to use the RPC function
       const { data: rpcResult, error: rpcError } = await supabase.rpc(
         'delete_diamond',
         {
@@ -56,28 +91,10 @@ export function useDeleteDiamond(onSuccess?: () => void) {
         throw rpcError;
       }
       
-      // Also delete from FastAPI backend if available
-      try {
-        const apiUrl = `https://api.mazalbot.com/api/v1/delete_diamond?stock_number=${encodeURIComponent(stockNumber)}&user_id=${user.id}`;
-        const response = await fetch(apiUrl, {
-          method: 'DELETE',
-          headers: {
-            'Authorization': 'Bearer ifj9ov1rh20fslfp',
-            'Content-Type': 'application/json'
-          }
-        });
-        
-        if (!response.ok) {
-          console.warn('FastAPI delete warning:', response.status, response.statusText);
-          // Continue even if FastAPI fails - we've already deleted from Supabase
-        } else {
-          console.log('Successfully deleted from FastAPI backend');
-        }
-      } catch (apiError) {
-        console.warn('FastAPI delete error (non-critical):', apiError);
-        // Continue even if FastAPI fails - we've already deleted from Supabase
-      }
+      // Dismiss the pending toast
+      pendingToast.dismiss();
       
+      // Show success toast
       toast({
         title: "Success",
         description: "Diamond deleted successfully",
