@@ -1,5 +1,6 @@
 import requests
 import json
+import time
 
 # Configuration
 BASE_URL = "https://api.mazalbot.com/api/v1"
@@ -19,15 +20,24 @@ def test_get_all_stones():
     url = f"{BASE_URL}/get_all_stones"
     params = {"user_id": USER_ID}
     
+    print(f"Request URL: {url}")
+    print(f"Request params: {params}")
+    print(f"Request headers: {headers}")
+    
     try:
         response = requests.get(url, headers=headers, params=params)
         print(f"Status Code: {response.status_code}")
+        print(f"Response headers: {dict(response.headers)}")
         
         if response.status_code == 200:
-            data = response.json()
-            print(f"Success! Found {len(data)} diamonds")
-            if data and len(data) > 0:
-                print(f"First diamond: {json.dumps(data[0], indent=2)[:500]}...")
+            try:
+                data = response.json()
+                print(f"Success! Found {len(data)} diamonds")
+                if data and len(data) > 0:
+                    print(f"First diamond: {json.dumps(data[0], indent=2)[:500]}...")
+            except json.JSONDecodeError:
+                print(f"Error: Could not parse JSON response")
+                print(f"Raw response: {response.text[:1000]}...")
         else:
             print(f"Error: {response.text}")
     except Exception as e:

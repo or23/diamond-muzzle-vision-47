@@ -23,19 +23,40 @@ export function useInventoryData() {
     try {
       console.log('Fetching inventory data from FastAPI for user:', user.id);
       
-      // Add timeout to prevent hanging
-      const response = await Promise.race([
-        api.get<any[]>(apiEndpoints.getAllStones(user.id)),
-        new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('API timeout')), 5000)
-        )
-      ]) as any;
+      // Add detailed logging for debugging
+      console.log('API endpoint:', apiEndpoints.getAllStones(user.id));
+      console.log('Full URL:', `https://api.mazalbot.com/api/v1${apiEndpoints.getAllStones(user.id)}`);
       
-      if (response.data) {
-        console.log('Received diamonds from FastAPI:', response.data.length, 'total diamonds');
+      // Make a direct fetch call with detailed logging
+      const directResponse = await fetch(`https://api.mazalbot.com/api/v1/get_all_stones?user_id=${user.id}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': 'Bearer ifj9ov1rh20fslfp',
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      console.log('Direct fetch response status:', directResponse.status);
+      console.log('Direct fetch response headers:', Object.fromEntries(directResponse.headers.entries()));
+      
+      let responseData;
+      try {
+        responseData = await directResponse.json();
+        console.log('Direct fetch response data type:', typeof responseData);
+        console.log('Direct fetch response data length:', Array.isArray(responseData) ? responseData.length : 'not an array');
+        console.log('Direct fetch response data sample:', JSON.stringify(responseData).substring(0, 200) + '...');
+      } catch (jsonError) {
+        const textResponse = await directResponse.text();
+        console.error('Failed to parse JSON response:', jsonError);
+        console.log('Raw response text:', textResponse.substring(0, 500) + '...');
+        throw new Error('Invalid JSON response from API');
+      }
+      
+      if (directResponse.ok && responseData) {
+        console.log('Received diamonds from direct fetch:', responseData.length, 'total diamonds');
         
         // Convert backend data to frontend format with authenticated user filtering
-        const convertedDiamonds = convertDiamondsToInventoryFormat(response.data, user.id);
+        const convertedDiamonds = convertDiamondsToInventoryFormat(responseData, user.id);
         console.log('Converted diamonds for display:', convertedDiamonds.length, 'diamonds for user', user.id);
         
         setAllDiamonds(convertedDiamonds);
@@ -53,9 +74,8 @@ export function useInventoryData() {
           }, 3000);
         }
       } else {
-        console.warn('No inventory data received from FastAPI');
-        setDiamonds([]);
-        setAllDiamonds([]);
+        console.warn('Direct fetch failed or returned no data:', directResponse.status);
+        throw new Error(`API returned status ${directResponse.status}`);
       }
     } catch (error) {
       console.warn("Inventory fetch failed, using fallback:", error);
