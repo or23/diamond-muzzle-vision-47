@@ -40,16 +40,13 @@ export function useDeleteDiamond(onSuccess?: () => void) {
       // First try to delete from FastAPI backend
       let fastApiSuccess = false;
       try {
-        const apiUrl = `${apiEndpoints.deleteDiamond(stockNumber, user.id)}`;
-        console.log('Calling FastAPI delete endpoint:', apiUrl);
-        
-        const response = await fetch(`https://api.mazalbot.com/api/v1/delete_stone/${stockNumber}`, {
+        // FIXED: Use the correct endpoint for deleting diamonds
+        const response = await fetch(`https://api.mazalbot.com/api/v1/delete_diamond?diamond_id=${stockNumber}&user_id=${user.id}`, {
           method: 'DELETE',
           headers: {
             'Authorization': 'Bearer ifj9ov1rh20fslfp',
             'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ user_id: user.id })
+          }
         });
         
         if (response.ok) {

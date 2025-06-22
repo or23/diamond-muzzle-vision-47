@@ -20,7 +20,8 @@ export const apiEndpoints = {
     return `/get_all_stones${userParam}`;
   },
   uploadInventory: () => `/upload-inventory`,
-  deleteDiamond: (diamondId: string, userId: number) => `/delete_stone/${diamondId}?user_id=${userId}`,
+  // FIXED: Updated to use the correct delete endpoint with query parameters
+  deleteDiamond: (diamondId: string, userId: number) => `/delete_diamond?diamond_id=${diamondId}&user_id=${userId}`,
   createReport: () => `/create-report`,
   getReport: (reportId: string) => `/get-report?diamond_id=${reportId}`,
   // Legacy endpoints for compatibility
