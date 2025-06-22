@@ -1,3 +1,5 @@
+import { Diamond } from "@/components/inventory/InventoryTable";
+
 interface DiamondData {
   id?: string;
   shape?: string;
@@ -8,6 +10,7 @@ interface DiamondData {
   price?: number;
   price_per_carat?: number;
   stock?: string;
+  stock_number?: string;
   owners?: number[];
   owner_id?: number;
   status?: string;
@@ -111,24 +114,36 @@ export function processDiamondDataForDashboard(diamonds: DiamondData[], currentU
 }
 
 export function convertDiamondsToInventoryFormat(diamonds: DiamondData[], currentUserId?: number) {
-  // Filter diamonds for current user if user ID is provided
+  // FIXED: Improved diamond filtering logic to handle all possible data formats
   const userDiamonds = currentUserId 
     ? diamonds.filter(diamond => {
-        console.log('Converting - checking diamond:', diamond.id, 'owners:', diamond.owners, 'against user:', currentUserId);
-        return diamond.owners?.includes(currentUserId) || diamond.owner_id === currentUserId;
+        // Check all possible ways a diamond could be associated with a user
+        const isOwner = Array.isArray(diamond.owners) && diamond.owners.includes(currentUserId);
+        const isDirectOwner = diamond.owner_id === currentUserId;
+        const hasNoOwnerInfo = !diamond.owners && !diamond.owner_id;
+        
+        // For debugging
+        if (diamond.id && (isOwner || isDirectOwner)) {
+          console.log(`Diamond ${diamond.id} belongs to user ${currentUserId}`);
+        }
+        
+        // Include diamonds that either belong to the user or have no owner info
+        return isOwner || isDirectOwner || hasNoOwnerInfo;
       })
     : diamonds;
   
   console.log('Converting diamonds to inventory format for user:', currentUserId, 'Filtered diamonds:', userDiamonds.length);
   
   return userDiamonds.map(diamond => {
+    // FIXED: Handle all possible property name variations
     const weight = diamond.weight || diamond.carat || 0;
     const pricePerCarat = diamond.price_per_carat || 0;
-    const totalPrice = Math.round(pricePerCarat * weight);
+    const totalPrice = diamond.price || Math.round(pricePerCarat * weight);
+    const stockNumber = diamond.stock_number || diamond.stock || `D${diamond.id || Math.floor(Math.random() * 10000)}`;
     
     return {
       id: diamond.id || '',
-      stockNumber: diamond.stock || `D${diamond.id || Math.floor(Math.random() * 10000)}`,
+      stockNumber: stockNumber,
       shape: diamond.shape || 'Unknown',
       carat: weight,
       color: diamond.color || 'Unknown',

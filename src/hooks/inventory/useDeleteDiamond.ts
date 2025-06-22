@@ -1,6 +1,6 @@
 import { useToast } from '@/components/ui/use-toast';
-import { useTelegramAuth } from '@/context/TelegramAuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import { useTelegramAuth } from '@/context/TelegramAuthContext';
 import { api, apiEndpoints } from '@/lib/api';
 
 export function useDeleteDiamond(onSuccess?: () => void) {

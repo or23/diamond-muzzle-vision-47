@@ -20,7 +20,7 @@ export const apiEndpoints = {
     return `/get_all_stones${userParam}`;
   },
   uploadInventory: () => `/upload-inventory`,
-  // FIXED: Updated to use the correct delete endpoint with query parameters
+  // FIXED: Use the correct endpoint format for deleting diamonds
   deleteDiamond: (diamondId: string, userId: number) => `/delete_diamond?diamond_id=${diamondId}&user_id=${userId}`,
   createReport: () => `/create-report`,
   getReport: (reportId: string) => `/get-report?diamond_id=${reportId}`,
@@ -66,7 +66,19 @@ export async function fetchApi<T>(
     } else {
       const text = await response.text();
       console.log('Non-JSON response:', text);
-      data = text;
+      
+      // Try to parse as JSON anyway if it looks like JSON
+      if (text.trim().startsWith('[') || text.trim().startsWith('{')) {
+        try {
+          data = JSON.parse(text);
+          console.log('Successfully parsed text as JSON');
+        } catch (e) {
+          console.error('Failed to parse text as JSON:', e);
+          data = text;
+        }
+      } else {
+        data = text;
+      }
     }
 
     if (!response.ok) {

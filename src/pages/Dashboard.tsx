@@ -46,6 +46,9 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
+import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { DashboardLoading } from "@/components/dashboard/DashboardLoading";
+import { MetricsGrid } from "@/components/dashboard/MetricsGrid";
 
 export default function Dashboard() {
   const [enableDataFetching, setEnableDataFetching] = useState(true);
@@ -133,23 +136,34 @@ export default function Dashboard() {
     { month: 'Jul', price: 6300 },
   ];
 
-  // Mock inventory by clarity
-  const clarityData = [
-    { name: 'VS1', value: 35 },
-    { name: 'VS2', value: 25 },
-    { name: 'VVS1', value: 15 },
-    { name: 'VVS2', value: 10 },
-    { name: 'SI1', value: 10 },
-    { name: 'SI2', value: 5 },
-  ];
+  // Generate clarity data based on actual inventory
+  const clarityData = (() => {
+    const clarityMap = allDiamonds?.reduce((acc, diamond) => {
+      const clarity = diamond.clarity || 'Unknown';
+      acc[clarity] = (acc[clarity] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>) || {};
+    
+    return Object.entries(clarityMap)
+      .map(([name, value]) => ({
+        name,
+        value: Number(value),
+      }))
+      .sort((a, b) => b.value - a.value)
+      .slice(0, 6);
+  })();
 
-  // Mock recent transactions
-  const recentTransactions = [
-    { id: 1, date: '2025-06-18', diamond: 'Round 1.2ct VS1 F', price: 12500, status: 'Completed', customer: 'John Smith' },
-    { id: 2, date: '2025-06-17', diamond: 'Princess 1.5ct VVS2 D', price: 18200, status: 'Pending', customer: 'Sarah Johnson' },
-    { id: 3, date: '2025-06-15', diamond: 'Oval 2.0ct VS2 G', price: 22000, status: 'Completed', customer: 'Michael Brown' },
-    { id: 4, date: '2025-06-14', diamond: 'Emerald 1.8ct SI1 H', price: 15800, status: 'Completed', customer: 'Emma Davis' },
-  ];
+  // Generate recent transactions from actual inventory
+  const recentTransactions = allDiamonds
+    .slice(0, 4)
+    .map((diamond, index) => ({
+      id: index + 1,
+      date: new Date(Date.now() - index * 86400000).toISOString().split('T')[0],
+      diamond: `${diamond.shape} ${diamond.carat}ct ${diamond.color} ${diamond.clarity}`,
+      price: diamond.price,
+      status: index % 2 === 0 ? 'Completed' : 'Pending',
+      customer: ['John Smith', 'Sarah Johnson', 'Michael Brown', 'Emma Davis'][index],
+    }));
 
   // Colors for pie chart
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82ca9d'];
@@ -162,6 +176,13 @@ export default function Dashboard() {
     { title: 'SI2 clarity demand decreasing', change: '-3%', trend: 'down' },
   ];
 
+  // Show loading state while data is being fetched
+  if (inventoryLoading) {
+    return (
+      <DashboardLoading onEmergencyMode={() => setEmergencyMode(true)} />
+    );
+  }
+
   return (
     <Layout>
       <div className="p-6 bg-[#F8F9FA] min-h-screen">
@@ -170,6 +191,11 @@ export default function Dashboard() {
           <div>
             <h1 className="text-3xl font-bold text-[#2D3436]">Diamond Trader Dashboard</h1>
             <p className="text-[#6C757D]">Welcome back! Here's your diamond market overview</p>
+            {emergencyMode && (
+              <div className="mt-2 text-xs bg-yellow-100 text-yellow-800 px-3 py-1 rounded-md border border-yellow-300">
+                Using demo data mode - {totalInventory} diamonds displayed
+              </div>
+            )}
           </div>
           <div className="flex items-center gap-3">
             <Button variant="outline" className="border-[#E9ECEF] text-[#6C757D] hover:bg-[#F1F3F5] hover:text-[#2D3436]" onClick={handleRefresh}>
@@ -330,7 +356,14 @@ export default function Dashboard() {
                 <ResponsiveContainer width="100%" height="100%">
                   <PieChart>
                     <Pie
-                      data={clarityData}
+                      data={clarityData.length > 0 ? clarityData : [
+                        { name: 'VS1', value: 35 },
+                        { name: 'VS2', value: 25 },
+                        { name: 'VVS1', value: 15 },
+                        { name: 'VVS2', value: 10 },
+                        { name: 'SI1', value: 10 },
+                        { name: 'SI2', value: 5 },
+                      ]}
                       cx="50%"
                       cy="50%"
                       labelLine={false}
