@@ -41,12 +41,10 @@ export function processDiamondDataForDashboard(diamonds: DiamondData[], currentU
   // Filter diamonds for current user if user ID is provided
   const userDiamonds = currentUserId 
     ? diamonds.filter(diamond => {
-        console.log('Checking diamond:', diamond.id, 'owners:', diamond.owners, 'against user:', currentUserId);
+        // Only include diamonds that explicitly belong to the current user
         return diamond.owners?.includes(currentUserId) || diamond.owner_id === currentUserId;
       })
     : diamonds;
-  
-  console.log('Processing dashboard data for user:', currentUserId, 'User diamonds:', userDiamonds.length, 'Total diamonds:', diamonds.length);
   
   // Calculate basic stats
   const totalDiamonds = userDiamonds.length;
@@ -114,25 +112,14 @@ export function processDiamondDataForDashboard(diamonds: DiamondData[], currentU
 }
 
 export function convertDiamondsToInventoryFormat(diamonds: DiamondData[], currentUserId?: number) {
-  // FIXED: Improved diamond filtering logic to handle all possible data formats
+  // Efficient filtering logic - only include diamonds that explicitly belong to the user
   const userDiamonds = currentUserId 
     ? diamonds.filter(diamond => {
-        // Check all possible ways a diamond could be associated with a user
-        const isOwner = Array.isArray(diamond.owners) && diamond.owners.includes(currentUserId);
-        const isDirectOwner = diamond.owner_id === currentUserId;
-        const hasNoOwnerInfo = !diamond.owners && !diamond.owner_id;
-        
-        // For debugging
-        if (diamond.id && (isOwner || isDirectOwner)) {
-          console.log(`Diamond ${diamond.id} belongs to user ${currentUserId}`);
-        }
-        
-        // Include diamonds that either belong to the user or have no owner info
-        return isOwner || isDirectOwner || hasNoOwnerInfo;
+        // Only include diamonds that explicitly belong to the current user
+        return (Array.isArray(diamond.owners) && diamond.owners.includes(currentUserId)) || 
+               diamond.owner_id === currentUserId;
       })
     : diamonds;
-  
-  console.log('Converting diamonds to inventory format for user:', currentUserId, 'Filtered diamonds:', userDiamonds.length);
   
   return userDiamonds.map(diamond => {
     // FIXED: Handle all possible property name variations

@@ -3,9 +3,19 @@ import json
 import time
 
 # Configuration
+import os
+
 BASE_URL = "https://api.mazalbot.com/api/v1"
-ACCESS_TOKEN = "ifj9ov1rh20fslfp"
-USER_ID = 2138564172  # Replace with your actual user ID
+ACCESS_TOKEN = os.getenv('MAZALBOT_ACCESS_TOKEN')
+USER_ID = int(os.getenv('MAZALBOT_USER_ID', '0'))  # Get from environment variable
+
+if not ACCESS_TOKEN:
+    print("Error: MAZALBOT_ACCESS_TOKEN environment variable not set")
+    exit(1)
+
+if not USER_ID:
+    print("Error: MAZALBOT_USER_ID environment variable not set")
+    exit(1)
 
 # Headers for all requests
 headers = {

@@ -88,7 +88,7 @@ class MazalbotClient:
     def __init__(
         self, 
         base_url: str = "https://api.mazalbot.com", 
-        access_token: str = "ifj9ov1rh20fslfp",
+        access_token: Optional[str] = None,
         user_id: Optional[int] = None,
         max_retries: int = 3,
         retry_delay: float = 1.0,
@@ -100,13 +100,19 @@ class MazalbotClient:
         
         Args:
             base_url: Base URL of the Mazalbot API
-            access_token: API access token for authentication
+            access_token: API access token for authentication (required)
             user_id: User ID for filtering operations (required for most endpoints)
             max_retries: Maximum number of retry attempts for failed requests
             retry_delay: Delay between retry attempts in seconds
             timeout: Request timeout in seconds
             log_level: Logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+        
+        Raises:
+            ValueError: If access_token is not provided
         """
+        if not access_token:
+            raise ValueError("access_token is required and cannot be None or empty")
+        
         self.base_url = base_url.rstrip('/')
         self.access_token = access_token
         self.user_id = user_id
@@ -233,8 +239,8 @@ class MazalbotClient:
                 
             except requests.RequestException as e:
                 # Network-related error
-                attempts += 1
-                if attempts < self.max_retries:
+                if attempts < self.max_retries - 1:
+                    attempts += 1
                     retry_time = self.retry_delay * (2 ** attempts)
                     self.logger.warning(
                         f"Request failed with exception: {str(e)}. "
@@ -610,10 +616,16 @@ if __name__ == "__main__":
     # Set up logging
     logging.basicConfig(level=logging.INFO)
     
-    # Initialize client
+    # Initialize client - get credentials from environment variables for security
+    import os
+    access_token = os.getenv('MAZALBOT_ACCESS_TOKEN')
+    if not access_token:
+        print("Error: MAZALBOT_ACCESS_TOKEN environment variable not set")
+        exit(1)
+    
     client = MazalbotClient(
         base_url="https://api.mazalbot.com",
-        access_token="ifj9ov1rh20fslfp",
+        access_token=access_token,
         user_id=2138564172  # Example user ID
     )
     
