@@ -210,11 +210,20 @@ class MazalbotClient:
                 # Check if response was successful
                 if response.status_code < 400:
                     self.logger.debug(f"Request successful: {response.status_code}")
+                    # Handle both dict and list responses
+                    if isinstance(response_data, dict):
+                        data = response_data.get("data", response_data)
+                        message = response_data.get("message")
+                    else:
+                        # API returns list directly (like /get_all_stones)
+                        data = response_data
+                        message = None
+                    
                     return ApiResponse(
                         success=True,
-                        data=response_data.get("data", response_data),
+                        data=data,
                         status_code=response.status_code,
-                        message=response_data.get("message")
+                        message=message
                     )
                 
                 # Check if we should retry
@@ -229,7 +238,11 @@ class MazalbotClient:
                     continue
                 
                 # Request failed and we're not retrying
-                error_message = response_data.get("error", response_data.get("message", f"HTTP {response.status_code}"))
+                if isinstance(response_data, dict):
+                    error_message = response_data.get("error", response_data.get("message", f"HTTP {response.status_code}"))
+                else:
+                    error_message = f"HTTP {response.status_code}"
+                    
                 self.logger.error(f"Request failed: {response.status_code} - {error_message}")
                 return ApiResponse(
                     success=False,
@@ -306,6 +319,9 @@ class MazalbotClient:
         """
         Get a specific diamond by ID.
         
+        Note: This endpoint may not exist on the current API. 
+        Use get_diamonds() with filters instead.
+        
         Args:
             diamond_id: The ID of the diamond to retrieve
             
@@ -319,23 +335,39 @@ class MazalbotClient:
                 status_code=400
             )
         
-        params = {"user_id": self.user_id}
-        
-        return self._make_request(
-            method="GET",
-            endpoint=f"/api/v1/get_stone/{diamond_id}",
-            params=params
-        )
+        # Try to find the diamond in the user's full list
+        # This is more reliable than the single diamond endpoint
+        all_diamonds = self.get_diamonds()
+        if all_diamonds.success and all_diamonds.data:
+            for diamond in all_diamonds.data:
+                if str(diamond.get("id")) == str(diamond_id):
+                    return ApiResponse(
+                        success=True,
+                        data=diamond,
+                        status_code=200,
+                        message="Diamond found in user's inventory"
+                    )
+            
+            return ApiResponse(
+                success=False,
+                error=f"Diamond with ID {diamond_id} not found in user's inventory",
+                status_code=404
+            )
+        else:
+            return all_diamonds  # Return the error from get_diamonds()
     
     def add_diamond(self, diamond_data: DiamondData) -> ApiResponse:
         """
         Add a new diamond to the inventory.
         
+        Note: Write operations may not be available with current API token.
+        This is a read-only API client with the current access level.
+        
         Args:
             diamond_data: Dictionary containing the diamond data
             
         Returns:
-            ApiResponse containing the created diamond data if successful
+            ApiResponse indicating the operation is not supported
         """
         if self.user_id is None:
             return ApiResponse(
@@ -355,27 +387,25 @@ class MazalbotClient:
                 status_code=400
             )
         
-        # Ensure user_id is included in the data
-        data = {
-            "user_id": self.user_id,
-            "diamonds": [diamond_data]
-        }
-        
-        return self._make_request(
-            method="POST",
-            endpoint="/api/v1/upload-inventory",
-            data=data
+        # Current API token appears to be read-only
+        self.logger.warning("Add diamond operation attempted but API token has read-only permissions")
+        return ApiResponse(
+            success=False,
+            error="Write operations not available with current API access level. Contact API provider for write permissions.",
+            status_code=403
         )
     
     def add_diamonds(self, diamonds: List[DiamondData]) -> ApiResponse:
         """
         Add multiple diamonds to the inventory in a single request.
         
+        Note: Write operations not available with current API access level.
+        
         Args:
             diamonds: List of dictionaries containing diamond data
             
         Returns:
-            ApiResponse containing the created diamonds data if successful
+            ApiResponse indicating the operation is not supported
         """
         if self.user_id is None:
             return ApiResponse(
@@ -402,28 +432,25 @@ class MazalbotClient:
                     status_code=400
                 )
         
-        # Prepare data for bulk upload
-        data = {
-            "user_id": self.user_id,
-            "diamonds": diamonds
-        }
-        
-        return self._make_request(
-            method="POST",
-            endpoint="/api/v1/upload-inventory",
-            data=data
+        self.logger.warning(f"Bulk add {len(diamonds)} diamonds attempted but API token has read-only permissions")
+        return ApiResponse(
+            success=False,
+            error="Write operations not available with current API access level. Contact API provider for write permissions.",
+            status_code=403
         )
     
     def update_diamond(self, diamond_id: str, diamond_data: DiamondData) -> ApiResponse:
         """
         Update an existing diamond.
         
+        Note: Write operations not available with current API access level.
+        
         Args:
             diamond_id: The ID of the diamond to update
             diamond_data: Dictionary containing the updated diamond data
             
         Returns:
-            ApiResponse containing the updated diamond data if successful
+            ApiResponse indicating the operation is not supported
         """
         if self.user_id is None:
             return ApiResponse(
@@ -432,27 +459,24 @@ class MazalbotClient:
                 status_code=400
             )
         
-        # Prepare data for update
-        data = {
-            "user_id": self.user_id,
-            **diamond_data
-        }
-        
-        return self._make_request(
-            method="PUT",
-            endpoint=f"/api/v1/update_diamond/{diamond_id}",
-            data=data
+        self.logger.warning(f"Update diamond {diamond_id} attempted but API token has read-only permissions")
+        return ApiResponse(
+            success=False,
+            error="Write operations not available with current API access level. Contact API provider for write permissions.",
+            status_code=403
         )
     
     def delete_diamond(self, diamond_id: str) -> ApiResponse:
         """
         Delete a diamond from the inventory.
         
+        Note: Delete operations not available with current API access level.
+        
         Args:
             diamond_id: The ID of the diamond to delete
             
         Returns:
-            ApiResponse indicating success or failure
+            ApiResponse indicating the operation is not supported
         """
         if self.user_id is None:
             return ApiResponse(
@@ -461,12 +485,11 @@ class MazalbotClient:
                 status_code=400
             )
         
-        params = {"user_id": self.user_id}
-        
-        return self._make_request(
-            method="DELETE",
-            endpoint=f"/api/v1/delete_diamond",
-            params={"diamond_id": diamond_id, "user_id": self.user_id}
+        self.logger.warning(f"Delete diamond {diamond_id} attempted but API token has read-only permissions")
+        return ApiResponse(
+            success=False,
+            error="Delete operations not available with current API access level. Contact API provider for write permissions.",
+            status_code=403
         )
     
     def create_report(self, diamond_id: str, report_type: str = "standard") -> ApiResponse:
